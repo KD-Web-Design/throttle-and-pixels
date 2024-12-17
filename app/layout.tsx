@@ -5,6 +5,7 @@ import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import Navbar from "@/components/Navbar";
 import { cookies } from "next/headers";
+import { ArticleProvider } from "@/context/articleContext";
 
 const fredoka = Fredoka({
   subsets: ["latin"],
@@ -25,16 +26,18 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${fredoka.className} bg-slate-50 antialiased h-full max-w-5xl m-auto px-4`}
+        className={`${fredoka.className} bg-slate-50 antialiased h-full max-w-6xl m-auto px-4`}
         suppressHydrationWarning
       >
-        <SidebarProvider defaultOpen={defaultOpen}>
-          <AppSidebar />
-          <main className="w-full">
-            <Navbar />
-            {children}
-          </main>
-        </SidebarProvider>
+        <ArticleProvider>
+          <SidebarProvider defaultOpen={defaultOpen}>
+            <AppSidebar />
+            <main className="w-full">
+              <Navbar />
+              {children}
+            </main>
+          </SidebarProvider>
+        </ArticleProvider>
       </body>
     </html>
   );
