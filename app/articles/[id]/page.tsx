@@ -5,14 +5,17 @@ import { db } from "@/db/firebaseConfig";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { DataType, UpdatePageProps } from "@/types/types";
+import { DataType } from "@/types/types";
+import { useParams } from "next/navigation";
 
-export default function PageArticle({ params }: UpdatePageProps) {
+export default function PageArticle() {
   const [loading, setLoading] = useState(true);
   const [article, setArticle] = useState<DataType | null>(null);
+  const params = useParams();
 
   useEffect(() => {
-    const articleId = params.id as string;
+    const articleId = params?.id as string;
+    if (!articleId) return;
     const unsubscribe = onSnapshot(collection(db, "articles"), (snapshot) => {
       snapshot.forEach((doc) => {
         const data = doc.data();
@@ -23,7 +26,7 @@ export default function PageArticle({ params }: UpdatePageProps) {
       });
     });
     return () => unsubscribe();
-  }, [params.id]);
+  }, [params?.id]);
 
   if (loading || !article) {
     return (
@@ -51,7 +54,7 @@ export default function PageArticle({ params }: UpdatePageProps) {
       <p className="text-muted-foreground mt-2">
         written by {article.authorName}{" "}
       </p>
-      <p className="mt-4">{article.description}</p>
+      <p className="whitespace-pre-wrap mt-4">{article.description}</p>
     </section>
   );
 }

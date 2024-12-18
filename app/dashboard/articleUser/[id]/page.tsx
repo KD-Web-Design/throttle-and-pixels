@@ -5,7 +5,7 @@ import { storage } from "@/db/firebaseConfig";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useFirebase } from "@/context/articleContext";
 import { schemaArticle } from "@/schema/schema";
-import { DataFormType, DataType, UpdatePageProps } from "@/types/types";
+import { DataFormType, DataType } from "@/types/types";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import useAuth from "@/hooks/useAuth";
@@ -16,8 +16,10 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { useParams } from "next/navigation";
 
-export default function PageUpdateArticle({ params }: UpdatePageProps) {
+export default function PageUpdateArticle() {
+  const params = useParams();
   const [file, setFile] = useState<File | undefined>();
   const { updateArticle, articles } = useFirebase();
   const { user } = useAuth();
@@ -25,7 +27,7 @@ export default function PageUpdateArticle({ params }: UpdatePageProps) {
   const [currentImageUrl, setCurrentImageUrl] = useState<string | undefined>(
     undefined
   );
-  const articleId = params.id as string;
+  const articleId = params?.id as string;
 
   const articleToUpdate = articles.find((article) => article.id === articleId);
 
@@ -86,7 +88,11 @@ export default function PageUpdateArticle({ params }: UpdatePageProps) {
             <span className="text-red-500">{errors.title.message}</span>
           )}
           <Label htmlFor="description">Description</Label>
-          <Textarea {...register("description")} id="description" />
+          <Textarea
+            {...register("description")}
+            id="description"
+            className="min-h-72"
+          />
           {errors.description && (
             <span className="text-red-500">{errors.description.message}</span>
           )}

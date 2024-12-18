@@ -27,9 +27,6 @@ export type Params = {
     description: string;
 }
 
-export type UpdatePageProps = {
-    params: Params;
-}
 
 export type AlertDialogDemoProps = {
     onDelete: () => void;
