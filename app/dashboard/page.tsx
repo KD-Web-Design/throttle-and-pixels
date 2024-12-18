@@ -1,10 +1,12 @@
 "use client";
 
+import AlertDialogDemo from "@/components/AlertDialogDemo";
 import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -65,33 +67,28 @@ export default function PageDashboard() {
       <div className="flex flex-col space-y-2 mt-4 p-3">
         <h1 className="text-2xl">Your articles</h1>
         <p className="text-muted-foreground text-lg">Your posts</p>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 pt-4">
           {articles.map((item, index) => (
-            <Card key={index} className="p-3">
-              <div className="flex gap-2 mb-4">
+            <Card key={index} className=" flex flex-col items-center">
+              <CardHeader>
+                <h3 className="font-semibold">{item.title}</h3>
+              </CardHeader>
+              <CardContent>
                 <Image
                   src={`${item.image}`}
                   alt={item.title}
                   width={200}
                   height={200}
-                  className="max-w-[200px] h-[100px] object-cover"
+                  className="max-w-[200px] h-[100px] object-cover rounded"
                 />
-                <div className="flex flex-col space-y-4">
-                  <h3 className="font-semibold">{item.title}</h3>
-                  <p className="text-sm">{item.description}</p>
-                </div>
-              </div>
-              <div className="flex items-center justify-between">
+              </CardContent>
+
+              <CardFooter className="flex w-full justify-between">
                 <Link href={`/dashboard/articleUser/${item.id}`}>
-                  <Button>Edit</Button>
+                  <Button variant="outline">Edit</Button>
                 </Link>
-                <Button
-                  variant="destructive"
-                  onClick={() => deleteArticle(item.id)}
-                >
-                  Delete
-                </Button>
-              </div>
+                <AlertDialogDemo onDelete={() => deleteArticle(item.id)} />
+              </CardFooter>
             </Card>
           ))}
         </div>

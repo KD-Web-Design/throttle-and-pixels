@@ -5,9 +5,9 @@ import { storage } from "@/db/firebaseConfig";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useFirebase } from "@/context/articleContext";
 import { schemaArticle } from "@/schema/schema";
-import { DataFormType } from "@/types/types";
+import { DataFormType, DataType, UpdatePageProps } from "@/types/types";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useAuth from "@/hooks/useAuth";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Card, CardContent } from "@/components/ui/card";
@@ -17,12 +17,23 @@ import { Textarea } from "@/components/ui/textarea";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
-export default function PageCreateArticle() {
+export default function PageUpdateArticle({ params }: UpdatePageProps) {
   const [file, setFile] = useState<File | undefined>();
-  const [imagePreview, setImagePreview] = useState<string | undefined>();
-  const { addArticle } = useFirebase();
+  const { updateArticle, articles } = useFirebase();
   const { user } = useAuth();
   const router = useRouter();
+  const [currentImageUrl, setCurrentImageUrl] = useState<string | undefined>(
+    undefined
+  );
+  const articleId = params.id as string;
+
+  const articleToUpdate = articles.find((article) => article.id === articleId);
+
+  useEffect(() => {
+    if (articleToUpdate) {
+      setCurrentImageUrl(articleToUpdate.image);
+    }
+  }, [articleToUpdate]);
 
   const {
     handleSubmit,
@@ -30,38 +41,36 @@ export default function PageCreateArticle() {
     formState: { errors },
   } = useForm<DataFormType>({
     resolver: yupResolver(schemaArticle),
+    defaultValues: articleToUpdate,
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
     setFile(selectedFile);
-
-    if (selectedFile) {
-      const imageUrl = URL.createObjectURL(selectedFile);
-      setImagePreview(imageUrl);
-    }
   };
 
   const onSubmit: SubmitHandler<DataFormType> = async (formData) => {
     try {
-      let imageUrl = "";
+      let updateImageUrl = currentImageUrl;
       if (file) {
         const imageRef = ref(storage, `articlesImages/${file.name}`);
         await uploadBytes(imageRef, file);
-        imageUrl = await getDownloadURL(imageRef);
+        updateImageUrl = await getDownloadURL(imageRef);
       }
-
-      await addArticle({
-        ...formData,
-        image: imageUrl,
+      const updatedArticle: DataType = {
+        id: articleId,
+        title: formData.title,
+        description: formData.description,
+        image: updateImageUrl as string,
         authorName: user?.displayName as string,
         authorId: user?.uid as string,
         createdAt: new Date(),
-      });
-      setImagePreview(undefined);
+      };
+
+      updateArticle(updatedArticle);
       router.push("/dashboard");
     } catch (error) {
-      console.error("form submit error", error);
+      console.error("article edit error", error);
     }
   };
   return (
@@ -89,11 +98,11 @@ export default function PageCreateArticle() {
             id="image"
             className="cursor-pointer"
           />
-          {imagePreview && (
+          {currentImageUrl && (
             <img
               className="w-full object-cover h-[500px] rounded-lg"
-              src={imagePreview}
-              alt={imagePreview}
+              src={currentImageUrl}
+              alt={currentImageUrl}
             />
           )}
 
@@ -103,7 +112,7 @@ export default function PageCreateArticle() {
                 Cancel
               </Button>
             </Link>
-            <Button type="submit">Submit</Button>
+            <Button type="submit">Edit</Button>
           </div>
         </form>
       </CardContent>

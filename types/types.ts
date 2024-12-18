@@ -20,3 +20,21 @@ export type DbContextType = {
     updateArticle: (article: DataType) => Promise<void>;
     deleteArticle: (id: string) => Promise<void>;
 }
+
+export type Params = {
+    id: string;
+    title: string;
+    description: string;
+}
+
+export type UpdatePageProps = {
+    params: Params;
+}
+
+export type AlertDialogDemoProps = {
+    onDelete: () => void;
+  }
+
+  export type MainArticleProps = {
+    article: DataType;
+  }
