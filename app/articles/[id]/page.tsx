@@ -43,6 +43,10 @@ export default function PageArticle() {
           <Button>Back to Home</Button>
         </Link>
       </div>
+      <h1 className="text-2xl uppercase font-black mt-4">{article.title}</h1>
+      <p className="text-muted-foreground my-2">
+        written by {article.authorName}{" "}
+      </p>
       <Image
         src={article.image || "/placeholder.jpg"}
         alt={article.title || "Titre manquant"}
@@ -50,10 +54,6 @@ export default function PageArticle() {
         height={500}
         className="w-full h-[500px] object-cover rounded"
       />
-      <h1 className="text-2xl uppercase font-black mt-4">{article.title}</h1>
-      <p className="text-muted-foreground mt-2">
-        written by {article.authorName}{" "}
-      </p>
       <p className="whitespace-pre-wrap mt-4">{article.description}</p>
     </section>
   );
