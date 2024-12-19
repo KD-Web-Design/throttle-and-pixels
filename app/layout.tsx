@@ -27,7 +27,7 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${fredoka.className} bg-slate-50 antialiased h-full px-4`}
+        className={`${fredoka.className} bg-slate-50 antialiased h-full px-2`}
         suppressHydrationWarning
       >
         <ArticleProvider>

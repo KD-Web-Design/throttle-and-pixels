@@ -1,11 +1,12 @@
 import Image from "next/image";
 import React from "react";
 import Link from "next/link";
-import { MainArticleProps } from "@/types/types";
+import { TrendingArticlesProps } from "@/types/types";
+import Newsletter from "./Newsletter";
 
-export default function TrendingArticles({ article }: MainArticleProps) {
+export default function TrendingArticles({ article }: TrendingArticlesProps) {
   return (
-    <div className="grid gap-4">
+    <div className="flex flex-col justify-end gap-4">
       {article.map((article) => (
         <Link key={article.id} href={`/articles/${article.id}`}>
           <section className="flex flex-col gap-4">
@@ -15,9 +16,9 @@ export default function TrendingArticles({ article }: MainArticleProps) {
                 alt={article.title}
                 width={200}
                 height={100}
-                className="object-cover rounded-xl"
+                className="object-cover rounded-xl max-lg:w-[160px] max-lg:h-[100px]"
               />
-              <div className="flex flex-col gap-4">
+              <div className="flex flex-col gap-2">
                 <span>post category</span>
                 <h1 className="text-lg font-semibold italic">
                   {article.title}
@@ -27,6 +28,7 @@ export default function TrendingArticles({ article }: MainArticleProps) {
           </section>
         </Link>
       ))}
+      <Newsletter />
     </div>
   );
 }
