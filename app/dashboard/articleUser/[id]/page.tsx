@@ -9,7 +9,7 @@ import { DataFormType, DataType } from "@/types/types";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import useAuth from "@/hooks/useAuth";
-import { yupResolver } from "@hookform/resolvers/yup";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -42,7 +42,7 @@ export default function PageUpdateArticle() {
     register,
     formState: { errors },
   } = useForm<DataFormType>({
-    resolver: yupResolver(schemaArticle),
+    resolver: zodResolver(schemaArticle),
     defaultValues: articleToUpdate,
   });
 
@@ -85,7 +85,7 @@ export default function PageUpdateArticle() {
           <Label htmlFor="title">Title</Label>
           <Input {...register("title")} id="title" />
           {errors.title && (
-            <span className="text-red-500">{errors.title.message}</span>
+            <span className="text-red-500 text-sm">{errors.title.message}</span>
           )}
           <Label htmlFor="description">Description</Label>
           <Textarea
@@ -94,7 +94,9 @@ export default function PageUpdateArticle() {
             className="min-h-72"
           />
           {errors.description && (
-            <span className="text-red-500">{errors.description.message}</span>
+            <span className="text-red-500 text-sm">
+              {errors.description.message}
+            </span>
           )}
           <Label htmlFor="image">Image</Label>
           <Input

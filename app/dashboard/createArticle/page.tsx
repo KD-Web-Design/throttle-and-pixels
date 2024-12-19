@@ -9,7 +9,7 @@ import { DataFormType } from "@/types/types";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import useAuth from "@/hooks/useAuth";
-import { yupResolver } from "@hookform/resolvers/yup";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -29,7 +29,7 @@ export default function PageCreateArticle() {
     register,
     formState: { errors },
   } = useForm<DataFormType>({
-    resolver: yupResolver(schemaArticle),
+    resolver: zodResolver(schemaArticle),
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -74,12 +74,14 @@ export default function PageCreateArticle() {
           <Label htmlFor="title">Title</Label>
           <Input {...register("title")} id="title" />
           {errors.title && (
-            <span className="text-red-500">{errors.title.message}</span>
+            <span className="text-red-500 text-sm">{errors.title.message}</span>
           )}
           <Label htmlFor="description">Description</Label>
           <Textarea {...register("description")} id="description" />
           {errors.description && (
-            <span className="text-red-500">{errors.description.message}</span>
+            <span className="text-red-500 text-sm">
+              {errors.description.message}
+            </span>
           )}
           <Label htmlFor="image">Image</Label>
           <Input

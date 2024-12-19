@@ -11,16 +11,13 @@ export default function MainArticle({ article }: MainArticleProps) {
           src={article.image || "/placeholder.jpg"}
           alt={article.title}
           className="rounded-xl object-cover w-full"
-          width={400}
-          height={200}
+          width={800}
+          height={800}
         />
         <span>Article</span>
         <h1 className="text-2xl font-semibold italic">{article.title}</h1>
         <div className="flex gap-4">
           <span className="font-semibold">{article.authorName}</span>
-          <span className="text-muted-foreground text-sm">
-            {new Date(article.createdAt).toLocaleDateString()}
-          </span>
         </div>
       </div>
     </Link>

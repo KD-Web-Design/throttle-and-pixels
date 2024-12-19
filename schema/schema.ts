@@ -1,7 +1,7 @@
-import * as Yup from "yup";
+import {z} from 'zod';
 
-export const schemaArticle = Yup.object().shape({
-    title: Yup.string().trim().required("Title is required"),
-    description: Yup.string().trim().required("Description is required"),
-    image: Yup.string()
-});
+export const schemaArticle = z.object({
+    title: z.string().nonempty("Title is required"),
+    description: z.string().nonempty("Description is required"),
+    image: z.string()
+})
