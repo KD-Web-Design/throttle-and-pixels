@@ -67,9 +67,12 @@ export default function PageDashboard() {
       <div className="flex flex-col space-y-2 mt-4 p-3">
         <h1 className="text-2xl">Your articles</h1>
         <p className="text-muted-foreground text-lg">Your posts</p>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 pt-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pt-4">
           {articles.map((item, index) => (
-            <Card key={index} className=" flex flex-col items-center">
+            <Card
+              key={index}
+              className=" flex flex-col items-center justify-between"
+            >
               <CardHeader>
                 <h3 className="font-semibold">{item.title}</h3>
               </CardHeader>

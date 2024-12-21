@@ -34,7 +34,7 @@ export default function Home() {
 
   return (
     <main className="flex flex-col p-2">
-      <div className="flex max-lg:flex-col gap-4">
+      <div className="flex max-lg:flex-col gap-4 items-end">
         {articles.length > 0 && <MainArticle article={articles[0]} />}
         {articles.length > 0 && <TrendingArticles article={articles} />}
       </div>

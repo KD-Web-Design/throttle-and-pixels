@@ -13,9 +13,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import TinyMceEditor from "@/components/TinyMceEditor";
 
 export default function PageCreateArticle() {
   const [file, setFile] = useState<File | undefined>();
@@ -27,8 +27,13 @@ export default function PageCreateArticle() {
   const {
     handleSubmit,
     register,
+    setValue,
+    watch,
     formState: { errors },
   } = useForm<DataFormType>({
+    defaultValues: {
+      description: "",
+    },
     resolver: zodResolver(schemaArticle),
   });
 
@@ -77,7 +82,12 @@ export default function PageCreateArticle() {
             <span className="text-red-500 text-sm">{errors.title.message}</span>
           )}
           <Label htmlFor="description">Description</Label>
-          <Textarea {...register("description")} id="description" />
+          <TinyMceEditor
+            id="description"
+            value={watch("description")}
+            onChange={(content) => setValue("description", content)}
+          />
+
           {errors.description && (
             <span className="text-red-500 text-sm">
               {errors.description.message}

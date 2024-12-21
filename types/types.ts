@@ -38,3 +38,9 @@ export type MainArticleProps = {
 export type TrendingArticlesProps = {
   article: DataType[];
 };
+
+export type TinyMceEditorProps = {
+  id?: string;
+  value?: string;
+  onChange?: (content: string) => void;
+};

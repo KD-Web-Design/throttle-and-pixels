@@ -3,10 +3,9 @@ import { useState, useEffect } from "react";
 import { collection, onSnapshot } from "firebase/firestore";
 import { db } from "@/db/firebaseConfig";
 import Image from "next/image";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
 import { DataType } from "@/types/types";
 import { useParams } from "next/navigation";
+import BreadCrumbDemo from "@/components/BreadCrumbDemo";
 
 export default function PageArticle() {
   const [loading, setLoading] = useState(true);
@@ -39,9 +38,7 @@ export default function PageArticle() {
   return (
     <section className="max-w-[1200px] mx-auto p-3">
       <div className="mb-4">
-        <Link href="/">
-          <Button>Back to Home</Button>
-        </Link>
+        <BreadCrumbDemo />
       </div>
       <h1 className="text-2xl uppercase font-black mt-4">{article.title}</h1>
       <p className="text-muted-foreground my-2">
@@ -54,7 +51,10 @@ export default function PageArticle() {
         height={500}
         className="w-full h-[500px] object-cover rounded"
       />
-      <p className="whitespace-pre-wrap mt-4">{article.description}</p>
+      <div
+        className="whitespace-pre-wrap mt-4"
+        dangerouslySetInnerHTML={{ __html: article.description }}
+      ></div>
     </section>
   );
 }
