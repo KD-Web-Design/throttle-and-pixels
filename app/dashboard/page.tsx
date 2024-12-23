@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/card";
 import { useFirebase } from "@/context/articleContext";
 import useAuth from "@/hooks/useAuth";
-import { Mail, User } from "lucide-react";
+import { Mail, PlusCircleIcon, User } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
@@ -35,8 +35,8 @@ export default function PageDashboard() {
                 <Image
                   src={user?.photoURL}
                   alt={`${user?.displayName}'s profile picture`}
-                  width={50}
-                  height={50}
+                  width={80}
+                  height={80}
                   className="rounded-full"
                 />
               </li>
@@ -65,7 +65,14 @@ export default function PageDashboard() {
         </CardContent>
       </Card>
       <div className="flex flex-col space-y-2 mt-4 p-3">
-        <h1 className="text-2xl">Your articles</h1>
+        <div className="flex justify-between">
+          <h1 className="text-2xl">Your articles</h1>
+          <Link href="/dashboard/createArticle">
+            <Button>
+              <PlusCircleIcon />
+            </Button>
+          </Link>
+        </div>
         <p className="text-muted-foreground text-lg">Your posts</p>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pt-4">
           {articles.map((item, index) => (

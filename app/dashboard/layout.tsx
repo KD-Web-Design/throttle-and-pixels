@@ -1,6 +1,6 @@
 "use client";
 
-import DashboardNav from "@/components/DashboardNav";
+import BreadCrumbDemo from "@/components/BreadCrumbDemo";
 import ProtectedRoute from "@/components/protectedRoute";
 
 export default function DashboardLayout({
@@ -10,7 +10,7 @@ export default function DashboardLayout({
 }) {
   return (
     <ProtectedRoute>
-      <DashboardNav />
+      <BreadCrumbDemo />
       {children}
     </ProtectedRoute>
   );

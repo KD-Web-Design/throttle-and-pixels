@@ -9,7 +9,7 @@ export default function TinyMceEditor({
 }: TinyMceEditorProps) {
   return (
     <Editor
-      apiKey="cwy7qkmwxtu5ogc909uuvaz51u55shitinzuj3j4o9if8e8r"
+      apiKey={process.env.NEXT_PUBLIC_TINY_MCE_API_KEY}
       id={id}
       init={{
         plugins: [

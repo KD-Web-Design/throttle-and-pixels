@@ -37,9 +37,7 @@ export default function PageArticle() {
 
   return (
     <section className="max-w-[1200px] mx-auto p-3">
-      <div className="mb-4">
-        <BreadCrumbDemo />
-      </div>
+      <BreadCrumbDemo />
       <h1 className="text-2xl uppercase font-black mt-4">{article.title}</h1>
       <p className="text-muted-foreground my-2">
         written by {article.authorName}{" "}
