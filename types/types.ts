@@ -1,3 +1,5 @@
+import { ButtonProps } from "@/components/ui/button";
+
 export type DataType = {
   id: string;
   title: string;
@@ -44,3 +46,7 @@ export type TinyMceEditorProps = {
   value?: string;
   onChange?: (content: string) => void;
 };
+
+export interface LoadingButtonProps extends ButtonProps {
+  isLoading?: boolean;
+}

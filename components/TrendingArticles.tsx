@@ -20,7 +20,7 @@ export default function TrendingArticles({ article }: TrendingArticlesProps) {
                 alt={article.title}
                 width={200}
                 height={100}
-                className="object-cover rounded-xl max-lg:w-[160px] lg:max-w-[180px] max-lg:h-[100px]"
+                className="object-cover rounded-xl max-lg:w-[160px] lg:max-w-[180px] lg:max-h-[110px]"
               />
               <div className="flex flex-col gap-2">
                 <span>post category</span>

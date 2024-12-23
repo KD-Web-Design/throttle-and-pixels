@@ -17,10 +17,12 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useParams } from "next/navigation";
 import TinyMceEditor from "@/components/TinyMceEditor";
+import LoadingButton from "@/components/LoadingButton";
 
 export default function PageUpdateArticle() {
   const params = useParams();
   const [file, setFile] = useState<File | undefined>();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { updateArticle, articles } = useFirebase();
   const { user } = useAuth();
   const router = useRouter();
@@ -54,6 +56,7 @@ export default function PageUpdateArticle() {
   };
 
   const onSubmit: SubmitHandler<DataFormType> = async (formData) => {
+    setIsSubmitting(true);
     try {
       let updateImageUrl = currentImageUrl;
       if (file) {
@@ -70,11 +73,18 @@ export default function PageUpdateArticle() {
         authorId: user?.uid as string,
         createdAt: new Date(),
       };
+      await updateArticle(updatedArticle);
 
-      updateArticle(updatedArticle);
+      setTimeout(() => {
+        router.push("/dashboard");
+      }, 4000);
       router.push("/dashboard");
     } catch (error) {
       console.error("article edit error", error);
+    } finally {
+      setTimeout(() => {
+        setIsSubmitting(false);
+      }, 4000);
     }
   };
   return (
@@ -123,7 +133,9 @@ export default function PageUpdateArticle() {
                 Cancel
               </Button>
             </Link>
-            <Button type="submit">Edit</Button>
+            <LoadingButton type="submit" isLoading={isSubmitting}>
+              Edit
+            </LoadingButton>
           </div>
         </form>
       </CardContent>

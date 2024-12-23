@@ -1,6 +1,7 @@
 "use client";
 
 import AlertDialogDemo from "@/components/AlertDialogDemo";
+import LoadingButton from "@/components/LoadingButton";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -15,11 +16,19 @@ import useAuth from "@/hooks/useAuth";
 import { Mail, PlusCircleIcon, User } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
 
 export default function PageDashboard() {
   const { user } = useAuth();
   const { articles, deleteArticle } = useFirebase();
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleClick = () => {
+    setIsLoading(true);
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 2000); // Simule un délai avant de permettre la navigation
+  };
 
   return (
     <>
@@ -67,10 +76,14 @@ export default function PageDashboard() {
       <div className="flex flex-col space-y-2 mt-4 p-3">
         <div className="flex justify-between">
           <h1 className="text-2xl">Your articles</h1>
-          <Link href="/dashboard/createArticle">
-            <Button>
-              <PlusCircleIcon />
-            </Button>
+          <Link href="/dashboard/createArticle" passHref>
+            <LoadingButton
+              onClick={handleClick}
+              isLoading={isLoading}
+              className="flex items-center space-x-2"
+            >
+              <PlusCircleIcon className="h-5 w-5" />
+            </LoadingButton>
           </Link>
         </div>
         <p className="text-muted-foreground text-lg">Your posts</p>

@@ -3,14 +3,18 @@
 import Link from "next/link";
 import React from "react";
 import { SidebarTrigger } from "./ui/sidebar";
-import { LogOut, UserCircleIcon } from "lucide-react";
+import { LogOut } from "lucide-react";
 import { signOut } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import { auth } from "@/db/firebaseConfig";
 import { Button } from "./ui/button";
+import useAuth from "@/hooks/useAuth";
+import LogInSheet from "./LogInSheet";
 
 export default function Navbar() {
   const router = useRouter();
+  const { user } = useAuth();
+
   const handleSignOut = () => {
     signOut(auth);
     router.push("/");
@@ -23,12 +27,16 @@ export default function Navbar() {
       </Link>
 
       <div className="ml-auto"></div>
-      <Link href="/signInAndUp" className="text-primary">
-        <UserCircleIcon />
-      </Link>
-      <Button onClick={handleSignOut} className="mx-2">
-        <LogOut />
-      </Button>
+      {!user ? (
+        <LogInSheet />
+      ) : (
+        <div className="inline-flex items-center gap-2">
+          <span className="text-sm">Hi, {user.displayName}</span>
+          <Button onClick={handleSignOut} className="mx-2">
+            <LogOut />
+          </Button>
+        </div>
+      )}
     </header>
   );
 }

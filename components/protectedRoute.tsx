@@ -10,7 +10,7 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     if (!isLoading && !user) {
-      router.push("/signInAndUp");
+      router.push("/");
     }
   }, [user, isLoading, router]);
 
