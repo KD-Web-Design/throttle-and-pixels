@@ -10,7 +10,7 @@ import { auth } from "@/db/firebaseConfig";
 import { Button } from "./ui/button";
 import useAuth from "@/hooks/useAuth";
 import LogInSheet from "./LogInSheet";
-import SearchSheet from "./SearchSheet";
+import SearchPopover from "./SearchPopover";
 
 export default function Navbar() {
   const router = useRouter();
@@ -28,13 +28,13 @@ export default function Navbar() {
       </Link>
 
       <div className="ml-auto"></div>
-      <SearchSheet />
+      <SearchPopover />
       {!user ? (
         <LogInSheet />
       ) : (
         <div className="inline-flex items-center gap-2">
           <span className="text-sm">Hi, {user.displayName}</span>
-          <Button onClick={handleSignOut} className="mx-2">
+          <Button onClick={handleSignOut} className="mx-2" size="icon">
             <LogOut />
           </Button>
         </div>
