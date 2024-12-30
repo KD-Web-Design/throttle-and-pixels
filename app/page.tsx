@@ -55,7 +55,7 @@ export default function Home() {
         {articles.length > 0 && <TrendingArticles article={articles} />}
       </div>
       <Spacing size="sm" />
-      <TrendingSection />
+      <TrendingSection article={articles} />
     </main>
   );
 }
