@@ -14,12 +14,14 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
 import TinyMceEditor from "@/components/TinyMceEditor";
+import LoadingButton from "@/components/LoadingButton";
 
 export default function PageCreateArticle() {
   const [file, setFile] = useState<File | undefined>();
   const [imagePreview, setImagePreview] = useState<string | undefined>();
+  const [isLoading, setIsLoading] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { addArticle } = useFirebase();
   const { user } = useAuth();
   const router = useRouter();
@@ -48,6 +50,7 @@ export default function PageCreateArticle() {
   };
 
   const onSubmit: SubmitHandler<DataFormType> = async (formData) => {
+    setIsSubmitting(true);
     try {
       let imageUrl = "";
       if (file) {
@@ -68,6 +71,10 @@ export default function PageCreateArticle() {
     } catch (error) {
       console.error("form submit error", error);
     }
+  };
+
+  const handleClick = () => {
+    setIsLoading(true);
   };
   return (
     <Card>
@@ -111,11 +118,17 @@ export default function PageCreateArticle() {
 
           <div className="flex items-center justify-between">
             <Link href="/dashboard">
-              <Button type="button" variant="outline">
+              <LoadingButton
+                onClick={handleClick}
+                isLoading={isLoading}
+                variant="outline"
+              >
                 Cancel
-              </Button>
+              </LoadingButton>
             </Link>
-            <Button type="submit">Submit</Button>
+            <LoadingButton type="submit" isLoading={isSubmitting}>
+              Submit
+            </LoadingButton>
           </div>
         </form>
       </CardContent>

@@ -2,7 +2,6 @@
 
 import AlertDialogDemo from "@/components/AlertDialogDemo";
 import LoadingButton from "@/components/LoadingButton";
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -22,12 +21,14 @@ export default function PageDashboard() {
   const { user } = useAuth();
   const { articles, deleteArticle } = useFirebase();
   const [isLoading, setIsLoading] = useState(false);
+  const [loadingArticleId, setLoadingArticleId] = useState<string | null>(null);
 
   const handleClick = () => {
     setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 2000); // Simule un délai avant de permettre la navigation
+  };
+
+  const handleEditClick = (articleId: string) => {
+    setLoadingArticleId(articleId);
   };
 
   return (
@@ -94,7 +95,7 @@ export default function PageDashboard() {
               className=" flex flex-col items-center justify-between"
             >
               <CardHeader>
-                <h3 className="font-semibold">{item.title}</h3>
+                <h3 className="font-semibold line-clamp-2">{item.title}</h3>
               </CardHeader>
               <CardContent>
                 <Image
@@ -107,8 +108,14 @@ export default function PageDashboard() {
               </CardContent>
 
               <CardFooter className="flex w-full justify-between">
-                <Link href={`/dashboard/articleUser/${item.id}`}>
-                  <Button variant="outline">Edit</Button>
+                <Link href={`/dashboard/articleUser/${item.id}`} passHref>
+                  <LoadingButton
+                    onClick={() => handleEditClick(item.id)}
+                    isLoading={loadingArticleId === item.id}
+                    variant="outline"
+                  >
+                    Edit
+                  </LoadingButton>
                 </Link>
                 <AlertDialogDemo onDelete={() => deleteArticle(item.id)} />
               </CardFooter>
