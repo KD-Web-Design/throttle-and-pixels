@@ -11,12 +11,15 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "./ui/button";
 import { AlertDialogDemoProps } from "@/types/types";
+import { Trash } from "lucide-react";
 
 export default function AlertDialogDemo({ onDelete }: AlertDialogDemoProps) {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button variant="destructive">Delete</Button>
+        <Button variant="destructive">
+          <Trash />
+        </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>

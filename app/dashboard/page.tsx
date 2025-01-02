@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/card";
 import { useFirebase } from "@/context/articleContext";
 import useAuth from "@/hooks/useAuth";
-import { Mail, PlusCircleIcon, User } from "lucide-react";
+import { Mail, PencilLine, PlusCircleIcon, User } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from "react";
@@ -88,36 +88,36 @@ export default function PageDashboard() {
           </Link>
         </div>
         <p className="text-muted-foreground text-lg">Your posts</p>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pt-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 pt-4">
           {articles.map((item, index) => (
             <Card
               key={index}
-              className=" flex flex-col items-center justify-between"
+              className=" flex flex-col items-center justify-between overflow-hidden relative"
             >
-              <CardHeader>
-                <h3 className="font-semibold line-clamp-2">{item.title}</h3>
-              </CardHeader>
-              <CardContent>
-                <Image
-                  src={`${item.image}`}
-                  alt={item.title}
-                  width={200}
-                  height={200}
-                  className="max-w-[200px] h-[100px] object-cover rounded"
-                />
-              </CardContent>
-
-              <CardFooter className="flex w-full justify-between">
+              <div className="flex gap-4 absolute bottom-2 left-2 shadow-lg">
                 <Link href={`/dashboard/articleUser/${item.id}`} passHref>
                   <LoadingButton
                     onClick={() => handleEditClick(item.id)}
                     isLoading={loadingArticleId === item.id}
                     variant="outline"
                   >
-                    Edit
+                    <PencilLine />
                   </LoadingButton>
                 </Link>
                 <AlertDialogDemo onDelete={() => deleteArticle(item.id)} />
+              </div>
+              <CardContent className="py-6">
+                <h3 className="font-semibold line-clamp-2">{item.title}</h3>
+              </CardContent>
+
+              <CardFooter className="p-0 w-full">
+                <Image
+                  src={`${item.image}`}
+                  alt={item.title}
+                  width={200}
+                  height={200}
+                  className="w-full object-cover"
+                />
               </CardFooter>
             </Card>
           ))}
