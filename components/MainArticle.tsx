@@ -4,6 +4,8 @@ import Link from "next/link";
 import React from "react";
 
 export default function MainArticle({ article }: MainArticleProps) {
+  const createdAtDate = new Date(article.createdAt.seconds * 1000);
+  const formattedDate = createdAtDate.toLocaleDateString("en-US");
   return (
     <Link
       href={`/articles/${article.id}`}
@@ -21,9 +23,10 @@ export default function MainArticle({ article }: MainArticleProps) {
       <span>Article</span>
       <h1 className="text-3xl font-semibold italic">{article.title}</h1>
 
-      <span className="text-muted-foreground mb-4">
-        By {article.authorName}
-      </span>
+      <div className="inline-flex items-center gap-4 mb-4">
+        <span className="text-muted-foreground">By {article.authorName}</span>
+        <span className="text-muted-foreground text-sm">{formattedDate}</span>
+      </div>
     </Link>
   );
 }

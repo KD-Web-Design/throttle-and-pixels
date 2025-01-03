@@ -7,7 +7,7 @@ import { useFirebase } from "@/context/articleContext";
 import { schemaArticle } from "@/schema/schema";
 import { DataFormType } from "@/types/types";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import useAuth from "@/hooks/useAuth";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Card, CardContent } from "@/components/ui/card";
@@ -16,7 +16,6 @@ import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import TinyMceEditor from "@/components/TinyMceEditor";
 import LoadingButton from "@/components/LoadingButton";
-import { useLocalStorage } from "usehooks-ts";
 
 export default function PageCreateArticle() {
   const [file, setFile] = useState<File | undefined>();
@@ -26,11 +25,6 @@ export default function PageCreateArticle() {
   const { addArticle } = useFirebase();
   const { user } = useAuth();
   const router = useRouter();
-  const [savedTitle, setSavedTitle] = useLocalStorage<string>("title", "");
-  const [savedDescription, setSavedDescription] = useLocalStorage<string>(
-    "description",
-    ""
-  );
 
   const {
     handleSubmit,
@@ -39,17 +33,8 @@ export default function PageCreateArticle() {
     watch,
     formState: { errors },
   } = useForm<DataFormType>({
-    defaultValues: {
-      title: savedTitle,
-      description: savedDescription,
-    },
     resolver: zodResolver(schemaArticle),
   });
-
-  useEffect(() => {
-    setValue("title", savedTitle);
-    setValue("description", savedDescription);
-  }, [savedTitle, savedDescription, setValue]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
@@ -78,8 +63,6 @@ export default function PageCreateArticle() {
         authorId: user?.uid as string,
         createdAt: new Date(),
       });
-      setSavedTitle("");
-      setSavedDescription("");
       setImagePreview(undefined);
       router.push("/dashboard");
     } catch (error) {
@@ -98,14 +81,7 @@ export default function PageCreateArticle() {
           className="flex flex-col space-y-4"
         >
           <Label htmlFor="title">Title</Label>
-          <Input
-            {...register("title")}
-            id="title"
-            onChange={(e) => {
-              setSavedTitle(e.target.value);
-              setValue("title", e.target.value);
-            }}
-          />
+          <Input {...register("title")} id="title" />
           {errors.title && (
             <span className="text-red-500 text-sm">{errors.title.message}</span>
           )}
@@ -114,7 +90,6 @@ export default function PageCreateArticle() {
             id="description"
             value={watch("description")}
             onChange={(content) => {
-              setSavedDescription(content);
               setValue("description", content);
             }}
           />
