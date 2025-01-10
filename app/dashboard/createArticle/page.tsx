@@ -16,6 +16,7 @@ import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import TinyMceEditor from "@/components/TinyMceEditor";
 import LoadingButton from "@/components/LoadingButton";
+import { Timestamp } from "firebase/firestore";
 
 export default function PageCreateArticle() {
   const [file, setFile] = useState<File | undefined>();
@@ -64,7 +65,7 @@ export default function PageCreateArticle() {
         image: imageUrl,
         authorName: user?.displayName as string,
         authorId: user?.uid as string,
-        createdAt: new Date(),
+        createdAt: Timestamp.now(),
       });
       setImagePreview(undefined);
       router.push("/dashboard");

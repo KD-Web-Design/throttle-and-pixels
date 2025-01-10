@@ -1,4 +1,5 @@
 import { MainArticleProps } from "@/types/types";
+import { Clock, User } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
@@ -21,9 +22,16 @@ export default function MainArticle({ article }: MainArticleProps) {
       <span>Article</span>
       <h1 className="text-3xl font-semibold italic">{article.title}</h1>
 
-      <span className="text-muted-foreground mb-4">
-        By {article.authorName}
-      </span>
+      <div className="inline-flex items-center gap-4 text-muted-foreground text-sm">
+        <span className="inline-flex items-center gap-1">
+          <User size={16} />
+          {article.authorName}
+        </span>
+        <span className="inline-flex items-center gap-1">
+          <Clock size={16} />
+          {article.createdAt?.toDate().toLocaleDateString("en-EN")}
+        </span>
+      </div>
     </Link>
   );
 }

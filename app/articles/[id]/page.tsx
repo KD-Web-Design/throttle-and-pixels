@@ -6,6 +6,7 @@ import Image from "next/image";
 import { DataType } from "@/types/types";
 import { useParams } from "next/navigation";
 import BreadCrumbDemo from "@/components/BreadCrumbDemo";
+import { Clock, User } from "lucide-react";
 
 export default function PageArticle() {
   const [loading, setLoading] = useState(true);
@@ -39,9 +40,15 @@ export default function PageArticle() {
     <section className="max-w-[1200px] mx-auto p-3">
       <BreadCrumbDemo />
       <h1 className="text-2xl uppercase font-black mt-4">{article.title}</h1>
-      <p className="text-muted-foreground my-2">
-        written by {article.authorName}{" "}
-      </p>
+      <div className="flex text-muted-foreground items-center gap-4 my-2 text-sm">
+        <p className="inline-flex items-center gap-1 ">
+          <User size={16} /> {article.authorName}{" "}
+        </p>
+        <p className="inline-flex items-center gap-1">
+          <Clock size={16} />
+          {article.createdAt?.toDate().toLocaleDateString("en-EN")}
+        </p>
+      </div>
       <Image
         src={article.image || "/placeholder.jpg"}
         alt={article.title || "Titre manquant"}

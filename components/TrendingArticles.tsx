@@ -24,7 +24,7 @@ export default function TrendingArticles({ article }: TrendingArticlesProps) {
               />
               <div className="flex flex-col gap-2">
                 <span>post category</span>
-                <h1 className="text-lg font-semibold italic group-hover:underline">
+                <h1 className="text-lg font-semibold italic group-hover:underline line-clamp-2">
                   {article.title}
                 </h1>
               </div>

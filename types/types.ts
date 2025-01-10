@@ -1,4 +1,5 @@
 import { ButtonProps } from "@/components/ui/button";
+import { Timestamp } from "firebase/firestore";
 
 export type DataType = {
   id: string;
@@ -7,7 +8,7 @@ export type DataType = {
   image: string;
   authorName: string;
   authorId: string;
-  createdAt: Date;
+  createdAt: Timestamp;
 };
 
 export type DataFormType = {
