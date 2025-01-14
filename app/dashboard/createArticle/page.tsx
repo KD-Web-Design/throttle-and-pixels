@@ -34,9 +34,6 @@ export default function PageCreateArticle() {
     watch,
     formState: { errors },
   } = useForm<DataFormType>({
-    defaultValues: {
-      description: "",
-    },
     resolver: zodResolver(schemaArticle),
   });
 
@@ -93,7 +90,9 @@ export default function PageCreateArticle() {
           <TinyMceEditor
             id="description"
             value={watch("description")}
-            onChange={(content) => setValue("description", content)}
+            onChange={(content) => {
+              setValue("description", content);
+            }}
           />
 
           {errors.description && (

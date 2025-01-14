@@ -6,7 +6,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { useFirebase } from "@/context/articleContext";
 import { schemaArticle } from "@/schema/schema";
 import { DataFormType, DataType } from "@/types/types";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import useAuth from "@/hooks/useAuth";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -15,9 +15,9 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { useParams } from "next/navigation";
 import TinyMceEditor from "@/components/TinyMceEditor";
 import LoadingButton from "@/components/LoadingButton";
+import { useLocalStorage } from "usehooks-ts";
 
 export default function PageUpdateArticle() {
   const params = useParams();
@@ -31,13 +31,17 @@ export default function PageUpdateArticle() {
   );
   const articleId = params?.id as string;
 
+  // Trouver l'article à mettre à jour
   const articleToUpdate = articles.find((article) => article.id === articleId);
 
-  useEffect(() => {
-    if (articleToUpdate) {
-      setCurrentImageUrl(articleToUpdate.image);
+  // Gestion du localStorage pour le formulaire
+  const [formData, setFormData] = useLocalStorage<DataFormType>(
+    `article-form-${articleId}`,
+    {
+      title: articleToUpdate?.title || "",
+      description: articleToUpdate?.description || "",
     }
-  }, [articleToUpdate]);
+  );
 
   const {
     handleSubmit,
@@ -47,8 +51,33 @@ export default function PageUpdateArticle() {
     formState: { errors },
   } = useForm<DataFormType>({
     resolver: zodResolver(schemaArticle),
-    defaultValues: articleToUpdate,
+    defaultValues: formData,
   });
+
+  // Synchroniser les valeurs de l'article existant dans le formulaire
+  useEffect(() => {
+    if (articleToUpdate) {
+      setValue("title", formData.title || articleToUpdate.title);
+      setValue(
+        "description",
+        formData.description || articleToUpdate.description
+      );
+      setCurrentImageUrl(articleToUpdate.image);
+    }
+  }, [articleToUpdate, formData, setValue]);
+
+  // Sauvegarder les modifications du titre dans le localStorage
+  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const title = e.target.value;
+    setFormData((prev) => ({ ...prev, title }));
+    setValue("title", title);
+  };
+
+  // Sauvegarder les modifications de la description dans le localStorage
+  const handleDescriptionChange = (content: string) => {
+    setFormData((prev) => ({ ...prev, description: content }));
+    setValue("description", content);
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
@@ -64,6 +93,7 @@ export default function PageUpdateArticle() {
         await uploadBytes(imageRef, file);
         updateImageUrl = await getDownloadURL(imageRef);
       }
+
       const updatedArticle: DataType = {
         id: articleId,
         title: formData.title,
@@ -73,20 +103,19 @@ export default function PageUpdateArticle() {
         authorId: user?.uid as string,
         createdAt: new Date(),
       };
+
       await updateArticle(updatedArticle);
 
-      setTimeout(() => {
-        router.push("/dashboard");
-      }, 4000);
+      // Réinitialiser le formulaire après soumission
+      setFormData({ title: "", description: "" });
       router.push("/dashboard");
     } catch (error) {
       console.error("article edit error", error);
     } finally {
-      setTimeout(() => {
-        setIsSubmitting(false);
-      }, 4000);
+      setIsSubmitting(false);
     }
   };
+
   return (
     <Card>
       <CardContent className="p-4">
@@ -95,22 +124,28 @@ export default function PageUpdateArticle() {
           className="flex flex-col space-y-4"
         >
           <Label htmlFor="title">Title</Label>
-          <Input {...register("title")} id="title" />
+          <Input
+            {...register("title")}
+            id="title"
+            value={watch("title")}
+            onChange={handleTitleChange}
+          />
           {errors.title && (
             <span className="text-red-500 text-sm">{errors.title.message}</span>
           )}
+
           <Label htmlFor="description">Description</Label>
           <TinyMceEditor
             id="description"
             value={watch("description")}
-            onChange={(content) => setValue("description", content)}
+            onChange={handleDescriptionChange}
           />
-
           {errors.description && (
             <span className="text-red-500 text-sm">
               {errors.description.message}
             </span>
           )}
+
           <Label htmlFor="image">Image</Label>
           <Input
             type="file"
