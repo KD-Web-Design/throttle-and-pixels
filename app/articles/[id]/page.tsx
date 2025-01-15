@@ -7,6 +7,9 @@ import { DataType } from "@/types/types";
 import { useParams } from "next/navigation";
 import BreadCrumbDemo from "@/components/BreadCrumbDemo";
 import { Clock, User } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import MoreArticles from "./components/MoreArticles";
+import { Spacing } from "@/components/Spacing";
 
 export default function PageArticle() {
   const [loading, setLoading] = useState(true);
@@ -41,13 +44,16 @@ export default function PageArticle() {
       <BreadCrumbDemo />
       <h1 className="text-2xl uppercase font-black mt-4">{article.title}</h1>
       <div className="flex text-muted-foreground items-center gap-4 my-2 text-sm">
-        <p className="inline-flex items-center gap-1 ">
+        <span className="inline-flex items-center gap-1 ">
           <User size={16} /> {article.authorName}{" "}
-        </p>
-        <p className="inline-flex items-center gap-1">
+        </span>
+        <span className="inline-flex items-center gap-1">
           <Clock size={16} />
           {article.createdAt?.toDate().toLocaleDateString("en-EN")}
-        </p>
+        </span>
+        <Badge variant="secondary">
+          {article.category.charAt(0).toUpperCase() + article.category.slice(1)}
+        </Badge>
       </div>
       <Image
         src={article.image || "/placeholder.jpg"}
@@ -57,9 +63,11 @@ export default function PageArticle() {
         className="w-full h-[500px] object-cover rounded"
       />
       <div
-        className="whitespace-pre-wrap mt-4"
+        className="whitespace-pre-wrap mt-4 bg-white p-4 shadow rounded"
         dangerouslySetInnerHTML={{ __html: article.description }}
       ></div>
+      <Spacing />
+      <MoreArticles currentArticle={article} />
     </section>
   );
 }

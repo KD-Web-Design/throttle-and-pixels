@@ -5,6 +5,7 @@ export type DataType = {
   id: string;
   title: string;
   description: string;
+  category: string;
   image: string;
   authorName: string;
   authorId: string;
@@ -14,6 +15,7 @@ export type DataType = {
 export type DataFormType = {
   title: string;
   description: string;
+  category: string;
   image?: string;
 };
 
@@ -50,4 +52,8 @@ export type TinyMceEditorProps = {
 
 export interface LoadingButtonProps extends ButtonProps {
   isLoading?: boolean;
+}
+
+export interface MoreArticlesProps {
+  currentArticle: DataType;
 }

@@ -14,7 +14,7 @@ export default function Newsletter() {
     <Card className="bg-gradient-to-r from-emerald-400 to-cyan-400">
       <CardHeader>
         <CardTitle className="italic">Newsletter</CardTitle>
-        <CardDescription>Description of the newsletter</CardDescription>
+        <CardDescription>Don&apos;t miss anything</CardDescription>
       </CardHeader>
       <CardContent>
         <form className="flex flex-col gap-4">
@@ -23,7 +23,9 @@ export default function Newsletter() {
             placeholder="Enter your email"
             className="bg-slate-50"
           />
-          <Button className="font-semibold text-lg">I&apos;m in !</Button>
+          <Button type="submit" className="font-semibold text-lg">
+            I&apos;m in !
+          </Button>
         </form>
       </CardContent>
     </Card>

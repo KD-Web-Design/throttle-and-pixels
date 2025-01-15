@@ -18,6 +18,17 @@ import { Button } from "@/components/ui/button";
 import TinyMceEditor from "@/components/TinyMceEditor";
 import LoadingButton from "@/components/LoadingButton";
 import { useLocalStorage } from "usehooks-ts";
+import { Timestamp } from "firebase/firestore";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { toast } from "@/hooks/use-toast";
 
 export default function PageUpdateArticle() {
   const params = useParams();
@@ -40,6 +51,7 @@ export default function PageUpdateArticle() {
     {
       title: articleToUpdate?.title || "",
       description: articleToUpdate?.description || "",
+      category: articleToUpdate?.category || "",
     }
   );
 
@@ -62,6 +74,8 @@ export default function PageUpdateArticle() {
         "description",
         formData.description || articleToUpdate.description
       );
+      setValue("category", formData.category || articleToUpdate.category);
+
       setCurrentImageUrl(articleToUpdate.image);
     }
   }, [articleToUpdate, formData, setValue]);
@@ -77,6 +91,12 @@ export default function PageUpdateArticle() {
   const handleDescriptionChange = (content: string) => {
     setFormData((prev) => ({ ...prev, description: content }));
     setValue("description", content);
+  };
+
+  // Sauvegarder les modifications de la catégorie dans le localStorage
+  const handleCategoryChange = (value: string) => {
+    setFormData((prev) => ({ ...prev, category: value }));
+    setValue("category", value);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -98,17 +118,22 @@ export default function PageUpdateArticle() {
         id: articleId,
         title: formData.title,
         description: formData.description,
+        category: formData.category,
         image: updateImageUrl as string,
         authorName: user?.displayName as string,
         authorId: user?.uid as string,
-        createdAt: new Date(),
+        createdAt: Timestamp.now(),
       };
 
       await updateArticle(updatedArticle);
 
       // Réinitialiser le formulaire après soumission
-      setFormData({ title: "", description: "" });
+      setFormData({ title: "", description: "", category: "" });
       router.push("/dashboard");
+      toast({
+        title: "Success ✅",
+        description: "Article updated !",
+      });
     } catch (error) {
       console.error("article edit error", error);
     } finally {
@@ -145,6 +170,31 @@ export default function PageUpdateArticle() {
               {errors.description.message}
             </span>
           )}
+
+          <div className="inline-flex gap-2 items-center">
+            <Select
+              onValueChange={handleCategoryChange}
+              value={watch("category")}
+            >
+              <SelectTrigger className="w-[180px]">
+                <SelectValue placeholder="Choose a category" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectLabel>Categories</SelectLabel>
+                  <SelectItem value="games">Games</SelectItem>
+                  <SelectItem value="guides">Guides</SelectItem>
+                  <SelectItem value="hardware">Hardware</SelectItem>
+                  <SelectItem value="misc">Misc</SelectItem>
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+            {errors.category && (
+              <span className="text-red-500 text-sm">
+                {errors.category.message}
+              </span>
+            )}
+          </div>
 
           <Label htmlFor="image">Image</Label>
           <Input

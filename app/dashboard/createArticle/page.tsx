@@ -17,6 +17,16 @@ import Link from "next/link";
 import TinyMceEditor from "@/components/TinyMceEditor";
 import LoadingButton from "@/components/LoadingButton";
 import { Timestamp } from "firebase/firestore";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { toast } from "@/hooks/use-toast";
 
 export default function PageCreateArticle() {
   const [file, setFile] = useState<File | undefined>();
@@ -64,8 +74,13 @@ export default function PageCreateArticle() {
         authorId: user?.uid as string,
         createdAt: Timestamp.now(),
       });
+
       setImagePreview(undefined);
       router.push("/dashboard");
+      toast({
+        title: "Success ✅",
+        description: "Article online !",
+      });
     } catch (error) {
       console.error("form submit error", error);
     }
@@ -100,6 +115,27 @@ export default function PageCreateArticle() {
               {errors.description.message}
             </span>
           )}
+          <div className="inline-flex gap-2 items-center">
+            <Select onValueChange={(value) => setValue("category", value)}>
+              <SelectTrigger className="w-[180px]">
+                <SelectValue placeholder="Choose a category" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectLabel>Categories</SelectLabel>
+                  <SelectItem value="games">Games</SelectItem>
+                  <SelectItem value="guides">Guides</SelectItem>
+                  <SelectItem value="hardware">Hardware</SelectItem>
+                  <SelectItem value="misc">Misc</SelectItem>
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+            {errors.category && (
+              <span className="text-red-500 text-sm">
+                {errors.category.message}
+              </span>
+            )}
+          </div>
           <Label htmlFor="image">Image</Label>
           <Input
             type="file"

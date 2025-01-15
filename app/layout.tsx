@@ -7,6 +7,7 @@ import Navbar from "@/components/Navbar";
 import { cookies } from "next/headers";
 import { ArticleProvider } from "@/context/articleContext";
 import Footer from "@/components/Footer";
+import { Toaster } from "@/components/ui/toaster";
 
 const fredoka = Fredoka({
   subsets: ["latin"],
@@ -40,6 +41,7 @@ export default async function RootLayout({
             </main>
           </SidebarProvider>
         </ArticleProvider>
+        <Toaster />
       </body>
     </html>
   );

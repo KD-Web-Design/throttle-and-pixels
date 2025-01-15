@@ -3,6 +3,7 @@ import { Clock, User } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
+import { Badge } from "./ui/badge";
 
 export default function MainArticle({ article }: MainArticleProps) {
   return (
@@ -19,7 +20,10 @@ export default function MainArticle({ article }: MainArticleProps) {
           height={800}
         />
       </div>
-      <span>Article</span>
+      <Badge className="w-fit" variant="secondary">
+        {article.category.charAt(0).toUpperCase() + article.category.slice(1)}
+      </Badge>
+
       <h1 className="text-3xl font-semibold italic">{article.title}</h1>
 
       <div className="inline-flex items-center gap-4 text-muted-foreground text-sm">

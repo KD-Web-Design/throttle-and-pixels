@@ -3,6 +3,7 @@ import React from "react";
 import Link from "next/link";
 import { TrendingArticlesProps } from "@/types/types";
 import Newsletter from "./Newsletter";
+import { Badge } from "./ui/badge";
 
 export default function TrendingArticles({ article }: TrendingArticlesProps) {
   return (
@@ -23,7 +24,10 @@ export default function TrendingArticles({ article }: TrendingArticlesProps) {
                 className="object-cover rounded-xl max-lg:w-[160px] lg:max-w-[180px] lg:max-h-[110px]"
               />
               <div className="flex flex-col gap-2">
-                <span>post category</span>
+                <Badge className="w-fit" variant="secondary">
+                  {article.category.charAt(0).toUpperCase() +
+                    article.category.slice(1)}
+                </Badge>
                 <h1 className="text-lg font-semibold italic group-hover:underline line-clamp-2">
                   {article.title}
                 </h1>
