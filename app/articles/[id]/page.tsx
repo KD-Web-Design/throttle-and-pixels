@@ -6,10 +6,12 @@ import Image from "next/image";
 import { DataType } from "@/types/types";
 import { useParams } from "next/navigation";
 import BreadCrumbDemo from "@/components/BreadCrumbDemo";
-import { Clock, User } from "lucide-react";
+import { Clock } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import MoreArticles from "./components/MoreArticles";
 import { Spacing } from "@/components/Spacing";
+import Loading from "./loading";
+import { HoverCardUser } from "./components/HoverCardUser";
 
 export default function PageArticle() {
   const [loading, setLoading] = useState(true);
@@ -32,11 +34,7 @@ export default function PageArticle() {
   }, [params?.id]);
 
   if (loading || !article) {
-    return (
-      <section className="w-full h-screen flex items-center justify-center">
-        Loading...
-      </section>
-    );
+    return <Loading />;
   }
 
   return (
@@ -44,9 +42,7 @@ export default function PageArticle() {
       <BreadCrumbDemo />
       <h1 className="text-2xl uppercase font-black mt-4">{article.title}</h1>
       <div className="flex text-muted-foreground items-center gap-4 my-2 text-sm">
-        <span className="inline-flex items-center gap-1 ">
-          <User size={16} /> {article.authorName}{" "}
-        </span>
+        <HoverCardUser article={article} />
         <span className="inline-flex items-center gap-1">
           <Clock size={16} />
           {article.createdAt?.toDate().toLocaleDateString("en-EN")}
