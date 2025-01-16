@@ -8,6 +8,9 @@ export type DataType = {
   category: string;
   image: string;
   authorName: string;
+  authorPhoto: string;
+  authorBio?: string;
+  authorJoinDate: string;
   authorId: string;
   createdAt: Timestamp;
 };
@@ -56,10 +59,4 @@ export interface LoadingButtonProps extends ButtonProps {
 
 export interface MoreArticlesProps {
   currentArticle: DataType;
-}
-
-export interface AuthorData {
-  photoURL: string;
-  displayName: string;
-  createdAt: Timestamp;
 }

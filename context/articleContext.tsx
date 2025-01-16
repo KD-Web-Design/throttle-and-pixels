@@ -50,11 +50,27 @@ export const ArticleProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const addArticle = async (data: Omit<DataType, "id"> & { image: string }) => {
     try {
+      const joinDate = new Date(
+        user?.metadata.creationTime || new Date()
+      ).toLocaleDateString("en-EN", {
+        year: "numeric",
+        month: "long",
+      });
       const docRef = await addDoc(collection(db, "articles"), {
         ...data,
         authorId,
+        authorPhoto: user?.photoURL || "",
+        authorBio: user?.displayName || "",
+        authorJoinDate: joinDate,
       });
-      const newArticle: DataType = { id: docRef.id, ...data, authorId };
+      const newArticle: DataType = {
+        id: docRef.id,
+        ...data,
+        authorId,
+        authorPhoto: user?.photoURL || "",
+        authorBio: user?.displayName || "",
+        authorJoinDate: joinDate,
+      };
       setArticles([...articles, newArticle]);
     } catch (error) {
       console.error("Error adding document: ", error);
