@@ -57,3 +57,9 @@ export interface LoadingButtonProps extends ButtonProps {
 export interface MoreArticlesProps {
   currentArticle: DataType;
 }
+
+export interface AuthorData {
+  photoURL: string;
+  displayName: string;
+  createdAt: Timestamp;
+}
