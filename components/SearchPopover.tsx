@@ -12,7 +12,7 @@ export default function SearchPopover() {
       </PopoverTrigger>
       <PopoverContent sideOffset={12}>
         <form action="" className="flex items-center gap-2">
-          <Input placeholder="Search..." />
+          <Input placeholder="Search article..." />
           <Button size="icon" type="submit">
             <SearchIcon />
           </Button>

@@ -12,6 +12,7 @@ export default function MoreArticles({ currentArticle }: MoreArticlesProps) {
 
   const similarArticles = articles
     .filter((a) => a.id !== currentArticle.id)
+    .sort(() => Math.random() - 0.5)
     .slice(0, 3);
   return (
     <>

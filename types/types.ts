@@ -8,9 +8,9 @@ export type DataType = {
   category: string;
   image: string;
   authorName: string;
-  authorPhoto: string;
+  authorPhoto?: string;
   authorBio?: string;
-  authorJoinDate: string;
+  authorJoinDate?: string;
   authorId: string;
   createdAt: Timestamp;
 };
