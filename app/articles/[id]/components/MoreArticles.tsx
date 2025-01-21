@@ -39,7 +39,9 @@ export default function MoreArticles({ currentArticle }: MoreArticlesProps) {
                 <h3 className="font-semibold text-xl line-clamp-2 group-hover:underline">
                   {a.title}
                 </h3>
-                <span className="text-sm">By {a.authorName}</span>
+                <span className="text-sm text-muted-foreground">
+                  By {a.authorName}
+                </span>
               </CardFooter>
             </Card>
           </Link>

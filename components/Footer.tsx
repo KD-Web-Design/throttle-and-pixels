@@ -6,7 +6,7 @@ import { Dot } from "lucide-react";
 
 export default function Footer() {
   return (
-    <footer className="py-8 px-4 flex flex-col items-center gap-4">
+    <footer className="py-8 px-4 flex flex-col items-center gap-4 mt-auto">
       <h3 className="text-muted-foreground text-sm">
         Throttle & Pixels Made By{" "}
         <Link

@@ -24,6 +24,7 @@ export type DataFormType = {
 
 export type DbContextType = {
   articles: DataType[];
+  userArticles: DataType[];
   addArticle: (articleData: Omit<DataType, "id">) => Promise<void>;
   updateArticle: (article: DataType) => Promise<void>;
   deleteArticle: (id: string) => Promise<void>;

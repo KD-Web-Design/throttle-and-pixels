@@ -14,7 +14,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
-import TinyMceEditor from "@/components/TinyMceEditor";
+import TinyMceEditor from "@/app/dashboard/createArticle/components/TinyMceEditor";
 import LoadingButton from "@/components/LoadingButton";
 import { Timestamp } from "firebase/firestore";
 import {

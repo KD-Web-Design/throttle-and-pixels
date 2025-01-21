@@ -29,7 +29,9 @@ export default function TrendingSection({ article }: TrendingArticlesProps) {
                 <h3 className="font-semibold text-xl line-clamp-2">
                   {a.title}
                 </h3>
-                <span className="text-sm">By {a.authorName}</span>
+                <span className="text-sm text-muted-foreground">
+                  By {a.authorName}
+                </span>
               </CardFooter>
             </Card>
           </Link>

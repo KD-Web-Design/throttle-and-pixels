@@ -19,7 +19,7 @@ import React, { useState } from "react";
 
 export default function DashboardContent() {
   const { user } = useAuth();
-  const { articles, deleteArticle } = useFirebase();
+  const { userArticles, deleteArticle } = useFirebase();
   const [isLoading, setIsLoading] = useState(false);
   const [loadingArticleId, setLoadingArticleId] = useState<string | null>(null);
 
@@ -88,7 +88,7 @@ export default function DashboardContent() {
         </div>
         <p className="text-muted-foreground text-lg">Your posts</p>
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 pt-4">
-          {articles.map((item, index) => (
+          {userArticles.map((item, index) => (
             <Card
               key={index}
               className=" flex flex-col items-center justify-between overflow-hidden relative"

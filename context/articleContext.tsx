@@ -29,8 +29,22 @@ export const ArticleProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [articles, setArticles] = useState<DataType[]>([]);
+  const [userArticles, setUserArticles] = useState<DataType[]>([]);
   const { user } = useAuth();
   const authorId = user?.uid as string;
+
+  // Fetch all public articles
+  useEffect(() => {
+    const q = query(collection(db, "articles"));
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const data: DataType[] = [];
+      snapshot.forEach((doc) => {
+        data.push({ id: doc.id, ...doc.data() } as DataType);
+      });
+      setArticles(data);
+    });
+    return () => unsubscribe();
+  }, []);
 
   useEffect(() => {
     if (!authorId) return;
@@ -43,7 +57,7 @@ export const ArticleProvider: React.FC<{ children: React.ReactNode }> = ({
       snapshot.forEach((doc) => {
         data.push({ id: doc.id, ...doc.data() } as DataType);
       });
-      setArticles(data);
+      setUserArticles(data);
     });
     return () => unsubscribe();
   }, [authorId]);
@@ -103,6 +117,7 @@ export const ArticleProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const value = {
     articles,
+    userArticles,
     addArticle,
     updateArticle,
     deleteArticle,

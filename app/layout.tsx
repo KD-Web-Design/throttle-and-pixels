@@ -34,9 +34,9 @@ export default async function RootLayout({
         <ArticleProvider>
           <SidebarProvider defaultOpen={defaultOpen}>
             <AppSidebar />
-            <main className="max-w-7xl mx-auto w-full">
+            <main className="max-w-7xl mx-auto w-full h-screen flex flex-col">
               <Navbar />
-              {children}
+              <div className="flex-1">{children}</div>
               <Footer />
             </main>
           </SidebarProvider>
