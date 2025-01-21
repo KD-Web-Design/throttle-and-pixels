@@ -20,7 +20,7 @@ export default function SearchPopover() {
   return (
     <Popover>
       <PopoverTrigger className="mr-2">
-        <SearchIcon size={16} className="text-primary" />
+        <SearchIcon size={20} className="text-primary" />
       </PopoverTrigger>
       <PopoverContent sideOffset={12}>
         <form onSubmit={handleSubmit} className="flex items-center gap-2">

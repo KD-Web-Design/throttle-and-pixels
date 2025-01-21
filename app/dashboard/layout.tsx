@@ -1,5 +1,3 @@
-"use client";
-
 import BreadCrumbDemo from "@/components/BreadCrumbDemo";
 import ProtectedRoute from "@/components/protectedRoute";
 
@@ -10,7 +8,9 @@ export default function DashboardLayout({
 }) {
   return (
     <ProtectedRoute>
-      <BreadCrumbDemo />
+      <div className="ml-2">
+        <BreadCrumbDemo />
+      </div>
       {children}
     </ProtectedRoute>
   );

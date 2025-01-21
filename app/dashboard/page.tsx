@@ -1,5 +1,9 @@
 import DashboardContent from "./components/DashboardContent";
 
 export default function PageDashboard() {
-  return <DashboardContent />;
+  return (
+    <section className="p-2">
+      <DashboardContent />
+    </section>
+  );
 }

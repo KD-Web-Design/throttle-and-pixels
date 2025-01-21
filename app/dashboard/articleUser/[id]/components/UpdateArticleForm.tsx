@@ -5,17 +5,19 @@ import { storage } from "@/db/firebaseConfig";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useFirebase } from "@/context/articleContext";
 import { schemaArticle } from "@/schema/schema";
-import { DataFormType } from "@/types/types";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { DataFormType, DataType } from "@/types/types";
+import { useRouter, useParams } from "next/navigation";
+import { useEffect, useState } from "react";
 import useAuth from "@/hooks/useAuth";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
 import TinyMceEditor from "@/app/dashboard/createArticle/components/TinyMceEditor";
 import LoadingButton from "@/components/LoadingButton";
+import { useLocalStorage } from "usehooks-ts";
 import { Timestamp } from "firebase/firestore";
 import {
   Select,
@@ -28,14 +30,30 @@ import {
 } from "@/components/ui/select";
 import { toast } from "@/hooks/use-toast";
 
-export default function CreateArticleForm() {
+export default function UpdateArticleForm() {
+  const params = useParams();
   const [file, setFile] = useState<File | undefined>();
-  const [imagePreview, setImagePreview] = useState<string | undefined>();
-  const [isLoading, setIsLoading] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { addArticle } = useFirebase();
+  const { updateArticle, articles } = useFirebase();
   const { user } = useAuth();
   const router = useRouter();
+  const [currentImageUrl, setCurrentImageUrl] = useState<string | undefined>(
+    undefined
+  );
+  const articleId = params?.id as string;
+
+  // Trouver l'article à mettre à jour
+  const articleToUpdate = articles.find((article) => article.id === articleId);
+
+  // Gestion du localStorage pour le formulaire
+  const [formData, setFormData] = useLocalStorage<DataFormType>(
+    `article-form-${articleId}`,
+    {
+      title: articleToUpdate?.title || "",
+      description: articleToUpdate?.description || "",
+      category: articleToUpdate?.category || "",
+    }
+  );
 
   const {
     handleSubmit,
@@ -45,49 +63,82 @@ export default function CreateArticleForm() {
     formState: { errors },
   } = useForm<DataFormType>({
     resolver: zodResolver(schemaArticle),
+    defaultValues: formData,
   });
+
+  // Synchroniser les valeurs de l'article existant dans le formulaire
+  useEffect(() => {
+    if (articleToUpdate) {
+      setValue("title", formData.title || articleToUpdate.title);
+      setValue(
+        "description",
+        formData.description || articleToUpdate.description
+      );
+      setValue("category", formData.category || articleToUpdate.category);
+
+      setCurrentImageUrl(articleToUpdate.image);
+    }
+  }, [articleToUpdate, formData, setValue]);
+
+  // Sauvegarder les modifications du titre dans le localStorage
+  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const title = e.target.value;
+    setFormData((prev) => ({ ...prev, title }));
+    setValue("title", title);
+  };
+
+  // Sauvegarder les modifications de la description dans le localStorage
+  const handleDescriptionChange = (content: string) => {
+    setFormData((prev) => ({ ...prev, description: content }));
+    setValue("description", content);
+  };
+
+  // Sauvegarder les modifications de la catégorie dans le localStorage
+  const handleCategoryChange = (value: string) => {
+    setFormData((prev) => ({ ...prev, category: value }));
+    setValue("category", value);
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
     setFile(selectedFile);
-
-    if (selectedFile) {
-      const imageUrl = URL.createObjectURL(selectedFile);
-      setImagePreview(imageUrl);
-    }
   };
 
   const onSubmit: SubmitHandler<DataFormType> = async (formData) => {
     setIsSubmitting(true);
     try {
-      let imageUrl = "";
+      let updateImageUrl = currentImageUrl;
       if (file) {
         const imageRef = ref(storage, `articlesImages/${file.name}`);
         await uploadBytes(imageRef, file);
-        imageUrl = await getDownloadURL(imageRef);
+        updateImageUrl = await getDownloadURL(imageRef);
       }
 
-      await addArticle({
-        ...formData,
-        image: imageUrl,
+      const updatedArticle: DataType = {
+        id: articleId,
+        title: formData.title,
+        description: formData.description,
+        category: formData.category,
+        image: updateImageUrl as string,
         authorName: user?.displayName as string,
         authorId: user?.uid as string,
         createdAt: Timestamp.now(),
-      });
+      };
 
-      setImagePreview(undefined);
+      await updateArticle(updatedArticle);
+
+      // Réinitialiser le formulaire après soumission
+      setFormData({ title: "", description: "", category: "" });
       router.push("/dashboard");
       toast({
         title: "Success ✅",
-        description: "Article online !",
+        description: "Article updated !",
       });
     } catch (error) {
-      console.error("form submit error", error);
+      console.error("article edit error", error);
+    } finally {
+      setIsSubmitting(false);
     }
-  };
-
-  const handleClick = () => {
-    setIsLoading(true);
   };
   return (
     <Card>
@@ -97,26 +148,33 @@ export default function CreateArticleForm() {
           className="flex flex-col space-y-4"
         >
           <Label htmlFor="title">Title</Label>
-          <Input {...register("title")} id="title" />
+          <Input
+            {...register("title")}
+            id="title"
+            value={watch("title")}
+            onChange={handleTitleChange}
+          />
           {errors.title && (
             <span className="text-red-500 text-sm">{errors.title.message}</span>
           )}
+
           <Label htmlFor="description">Description</Label>
           <TinyMceEditor
             id="description"
             value={watch("description")}
-            onChange={(content) => {
-              setValue("description", content);
-            }}
+            onChange={handleDescriptionChange}
           />
-
           {errors.description && (
             <span className="text-red-500 text-sm">
               {errors.description.message}
             </span>
           )}
+
           <div className="inline-flex gap-2 items-center">
-            <Select onValueChange={(value) => setValue("category", value)}>
+            <Select
+              onValueChange={handleCategoryChange}
+              value={watch("category")}
+            >
               <SelectTrigger className="w-[180px]">
                 <SelectValue placeholder="Choose a category" />
               </SelectTrigger>
@@ -136,6 +194,7 @@ export default function CreateArticleForm() {
               </span>
             )}
           </div>
+
           <Label htmlFor="image">Image</Label>
           <Input
             type="file"
@@ -144,26 +203,22 @@ export default function CreateArticleForm() {
             id="image"
             className="cursor-pointer"
           />
-          {imagePreview && (
+          {currentImageUrl && (
             <img
               className="w-full object-cover max-h-[500px] rounded-lg"
-              src={imagePreview}
-              alt={imagePreview}
+              src={currentImageUrl}
+              alt={currentImageUrl}
             />
           )}
 
           <div className="flex items-center justify-between">
             <Link href="/dashboard">
-              <LoadingButton
-                onClick={handleClick}
-                isLoading={isLoading}
-                variant="outline"
-              >
+              <Button type="button" variant="outline">
                 Cancel
-              </LoadingButton>
+              </Button>
             </Link>
             <LoadingButton type="submit" isLoading={isSubmitting}>
-              Submit
+              Edit
             </LoadingButton>
           </div>
         </form>

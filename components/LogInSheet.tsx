@@ -20,7 +20,7 @@ export default function LogInSheet() {
   return (
     <Sheet>
       <SheetTrigger>
-        <UserCircleIcon className="text-primary" />
+        <UserCircleIcon className="text-primary" size={20} />
       </SheetTrigger>
       <SheetContent>
         <SheetHeader>

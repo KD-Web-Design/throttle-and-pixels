@@ -24,6 +24,17 @@ export default function BreadCrumbDemo() {
   const pathname = usePathname();
   const segment = pathname.split("/").pop() || "Home";
 
+  const getPageTitle = () => {
+    switch (true) {
+      case pathname.includes("/createArticle"):
+        return "Create Article";
+      case pathname.includes("/articleUser"):
+        return "Edit Article";
+      default:
+        return isId(segment) ? "Articles" : capitalizeFirstLetter(segment);
+    }
+  };
+
   return (
     <Breadcrumb className="mb-4">
       <BreadcrumbList>
@@ -32,12 +43,25 @@ export default function BreadCrumbDemo() {
             <Link href="/">Home</Link>
           </BreadcrumbLink>
         </BreadcrumbItem>
-        <BreadcrumbSeparator />
-        <BreadcrumbItem>
-          <BreadcrumbPage>
-            {isId(segment) ? "Articles" : capitalizeFirstLetter(segment)}
-          </BreadcrumbPage>
-        </BreadcrumbItem>
+        {pathname !== "/" && (
+          <>
+            <BreadcrumbSeparator />
+            {pathname.includes("/createArticle") ||
+            pathname.includes("/articleUser") ? (
+              <>
+                <BreadcrumbItem>
+                  <BreadcrumbLink asChild>
+                    <Link href="/dashboard">Dashboard</Link>
+                  </BreadcrumbLink>
+                </BreadcrumbItem>
+                <BreadcrumbSeparator />
+              </>
+            ) : null}
+            <BreadcrumbItem>
+              <BreadcrumbPage>{getPageTitle()}</BreadcrumbPage>
+            </BreadcrumbItem>
+          </>
+        )}
       </BreadcrumbList>
     </Breadcrumb>
   );

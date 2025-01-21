@@ -51,7 +51,7 @@ export default function ArticleContent({ articleId }: { articleId: string }) {
         alt={article.title || "Titre manquant"}
         width={1000}
         height={500}
-        className="w-full h-[500px] object-cover rounded"
+        className="w-full max-h-[500px] object-cover rounded"
       />
       <div
         className="whitespace-pre-wrap mt-4 bg-white p-4 shadow rounded"

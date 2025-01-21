@@ -11,6 +11,8 @@ import { Button } from "./ui/button";
 import useAuth from "@/hooks/useAuth";
 import LogInSheet from "./LogInSheet";
 import SearchPopover from "./SearchPopover";
+import { Avatar, AvatarImage } from "./ui/avatar";
+import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 
 export default function Navbar() {
   const router = useRouter();
@@ -32,12 +34,25 @@ export default function Navbar() {
       {!user ? (
         <LogInSheet />
       ) : (
-        <div className="inline-flex items-center gap-2">
-          <span className="text-sm">Hi, {user.displayName}</span>
-          <Button onClick={handleSignOut} className="mx-2" size="icon">
-            <LogOut />
-          </Button>
-        </div>
+        <Popover>
+          <PopoverTrigger>
+            <Avatar className="w-8 h-8">
+              <AvatarImage
+                src={user.photoURL ?? undefined}
+                alt={user.displayName ?? undefined}
+              />
+            </Avatar>
+          </PopoverTrigger>
+          <PopoverContent className="w-fit">
+            <div className="flex flex-col w-full gap-4">
+              <span className="text-sm">Hi, {user.displayName}</span>
+              <Button onClick={handleSignOut}>
+                <LogOut />
+                Logout
+              </Button>
+            </div>
+          </PopoverContent>
+        </Popover>
       )}
     </nav>
   );
