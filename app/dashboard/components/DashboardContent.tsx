@@ -50,12 +50,12 @@ export default function DashboardContent() {
                 />
               </li>
             )}
-            <li className="inline-flex items-center space-x-2">
+            <li className="inline-flex items-center space-x-2 max-lg:text-sm">
               <User size={20} />
               <span className="font-semibold">Your name:</span>
               <span>{user?.displayName}</span>
             </li>
-            <li className="inline-flex items-center space-x-2">
+            <li className="inline-flex items-center space-x-2 max-lg:text-sm">
               <Mail size={20} />
               <span className="font-semibold">Your email:</span>
               <span>{user?.email}</span>

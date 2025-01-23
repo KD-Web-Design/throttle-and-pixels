@@ -43,14 +43,24 @@ export default function Navbar() {
               />
             </Avatar>
           </PopoverTrigger>
-          <PopoverContent className="w-fit">
-            <div className="flex flex-col w-full gap-4">
-              <span className="text-sm">Hi, {user.displayName}</span>
-              <Button onClick={handleSignOut}>
-                <LogOut />
-                Logout
-              </Button>
-            </div>
+          <PopoverContent
+            className="w-fit flex flex-col items-center gap-4"
+            align="end"
+          >
+            <span className=" text-xs">{user.email}</span>
+            <Avatar className="w-16 h-16">
+              <AvatarImage
+                src={user.photoURL ?? undefined}
+                alt={user.displayName ?? undefined}
+              />
+            </Avatar>
+            <span className="text-sm font-semibold">
+              Hi, {user.displayName}
+            </span>
+            <Button onClick={handleSignOut}>
+              <LogOut />
+              Logout
+            </Button>
           </PopoverContent>
         </Popover>
       )}

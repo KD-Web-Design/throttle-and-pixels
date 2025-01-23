@@ -26,7 +26,7 @@ export default function TrendingSection({ article }: TrendingArticlesProps) {
                 <Badge className="w-fit" variant="secondary">
                   {a.category.charAt(0).toUpperCase() + a.category.slice(1)}
                 </Badge>
-                <h3 className="font-semibold text-xl line-clamp-2">
+                <h3 className="font-semibold text-xl line-clamp-2 italic">
                   {a.title}
                 </h3>
                 <span className="text-sm text-muted-foreground">

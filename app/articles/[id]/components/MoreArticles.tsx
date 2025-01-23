@@ -36,7 +36,7 @@ export default function MoreArticles({ currentArticle }: MoreArticlesProps) {
                 <Badge className="w-fit" variant="secondary">
                   {a.category.charAt(0).toUpperCase() + a.category.slice(1)}
                 </Badge>
-                <h3 className="font-semibold text-xl line-clamp-2 group-hover:underline">
+                <h3 className="font-semibold text-xl line-clamp-2 group-hover:underline italic">
                   {a.title}
                 </h3>
                 <span className="text-sm text-muted-foreground">

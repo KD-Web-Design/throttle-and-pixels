@@ -50,23 +50,21 @@ export default function SearchResults() {
             href={`/articles/${article.id}`}
             className="group"
           >
-            <Card className="flex items-center">
-              <CardHeader className="p-4">
-                <div className="relative w-32 h-24">
-                  {article.image && (
-                    <Image
-                      src={article.image}
-                      alt={article.title}
-                      fill
-                      className="object-cover rounded"
-                    />
-                  )}
-                </div>
+            <Card className="flex max-lg:flex-col items-center">
+              <CardHeader className="relative w-full h-48 lg:w-48 lg:h-24 mx-4">
+                {article.image && (
+                  <Image
+                    src={article.image}
+                    alt={article.title}
+                    fill
+                    className="object-cover rounded"
+                  />
+                )}
               </CardHeader>
-              <CardContent className="flex gap-8 p-0 px-4">
+              <CardContent className="flex gap-8 p-4">
                 <div className="flex flex-col gap-2">
                   <div className="inline-flex items-center gap-2">
-                    <h2 className="font-semibold group-hover:underline">
+                    <h2 className="font-semibold group-hover:underline max-lg:line-clamp-2">
                       {article.title}
                     </h2>
                     <Badge className="w-fit" variant="secondary">
@@ -74,9 +72,12 @@ export default function SearchResults() {
                         article.category.slice(1)}
                     </Badge>
                   </div>
-                  <p className="text-muted-foreground text-sm">
+                  <p className="text-muted-foreground text-sm max-lg:hidden">
                     {stripHtml(article.description).substring(0, 350)}...
                   </p>
+                  <span className="text-xs text-muted-foreground">
+                    By {article.authorName}
+                  </span>
                 </div>
               </CardContent>
             </Card>
