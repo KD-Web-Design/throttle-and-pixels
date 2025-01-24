@@ -61,3 +61,10 @@ export interface LoadingButtonProps extends ButtonProps {
 export interface MoreArticlesProps {
   currentArticle: DataType;
 }
+
+export interface PaginationProps {
+  totalPages: number;
+  currentPage: number;
+  pages: number[];
+  onPageChange: (page: number) => void;
+}

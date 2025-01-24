@@ -17,6 +17,16 @@ export default function Footer() {
           KD Web Design
         </Link>
       </h3>
+      <h3 className="text-muted-foreground text-sm">
+        All articles from{" "}
+        <Link
+          href="https://www.overtake.gg/"
+          target="_blank"
+          className="text-primary"
+        >
+          Overtake.gg
+        </Link>
+      </h3>
       <div className="flex gap-2">
         <Link href="https://github.com/KD-Web-Design" target="_blank">
           <GithubIcon size={24} className="text-primary" />

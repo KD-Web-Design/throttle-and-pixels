@@ -15,7 +15,10 @@ export default function SearchResults() {
   const [isLoading, setIsLoading] = useState(true);
   const searchParams = useSearchParams();
   const query = searchParams.get("q") || "";
+  const category = searchParams.get("category") || "";
   const { articles } = useFirebase();
+  const resultsPerPage = 10;
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
     setIsLoading(true);
@@ -24,28 +27,48 @@ export default function SearchResults() {
     }, 250);
 
     return () => clearTimeout(timer);
-  }, [query]);
+  }, [query, category]);
 
   const searchResults = useMemo(() => {
-    return articles.filter(
-      (article) =>
+    return articles.filter((article) => {
+      const matchesQuery =
+        query === "" ||
         article.title.toLowerCase().includes(query.toLowerCase()) ||
-        article.description.toLowerCase().includes(query.toLowerCase())
-    );
-  }, [articles, query]);
+        article.description.toLowerCase().includes(query.toLowerCase());
+
+      const matchesCategory =
+        category === "" ||
+        article.category.toLowerCase() === category.toLowerCase();
+
+      return matchesQuery && matchesCategory;
+    });
+  }, [articles, query, category]);
 
   if (isLoading) {
     return <SearchResultsLoading />;
+  }
+
+  const totalPages = Math.ceil(searchResults.length / resultsPerPage);
+  const startIndex = (page - 1) * resultsPerPage;
+  const endIndex = startIndex + resultsPerPage;
+
+  const pages = [];
+  for (let i = 1; i <= totalPages; i++) {
+    pages.push(i);
   }
   return (
     <>
       <h2 className="scroll-m-20 pb-2 text-xl font-semibold tracking-tight first:mt-0">
         Search Results for query : {query}
+        {category && ` in ${category}`}
       </h2>
       {searchResults.length === 0 && !isLoading ? (
-        <p>No articles found for &quot;{query}&quot;</p>
+        <p>
+          😢 No articles found for &quot;{query}&quot;
+          {category && ` in "${category}"`}
+        </p>
       ) : (
-        searchResults.slice(0, 10).map((article) => (
+        searchResults.slice(startIndex, endIndex).map((article) => (
           <Link
             key={article.id}
             href={`/articles/${article.id}`}
@@ -85,7 +108,12 @@ export default function SearchResults() {
           </Link>
         ))
       )}
-      <PaginationDemo />
+      <PaginationDemo
+        totalPages={totalPages}
+        currentPage={page}
+        onPageChange={setPage}
+        pages={pages}
+      />
     </>
   );
 }

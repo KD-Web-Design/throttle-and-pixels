@@ -1,36 +1,57 @@
 import {
   Pagination,
   PaginationContent,
-  PaginationEllipsis,
   PaginationItem,
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import { PaginationProps } from "@/types/types";
 
-export function PaginationDemo() {
+export function PaginationDemo({
+  totalPages,
+  currentPage,
+  pages,
+  onPageChange,
+}: PaginationProps) {
   return (
     <Pagination>
       <PaginationContent>
         <PaginationItem>
-          <PaginationPrevious href="#" />
+          <PaginationPrevious
+            href="#"
+            className={
+              currentPage === 1 ? "pointer-events-none opacity-50" : undefined
+            }
+            onClick={() => onPageChange(currentPage - 1)}
+          />
         </PaginationItem>
+        {pages.map((page, idx) => (
+          <PaginationItem key={idx}>
+            <PaginationLink
+              href="#"
+              onClick={() => onPageChange(page)}
+              className={
+                currentPage === page
+                  ? "pointer-events-none opacity-50"
+                  : undefined
+              }
+            >
+              {page}
+            </PaginationLink>
+          </PaginationItem>
+        ))}
+
         <PaginationItem>
-          <PaginationLink href="#" isActive>
-            1
-          </PaginationLink>
-        </PaginationItem>
-        <PaginationItem>
-          <PaginationLink href="#">2</PaginationLink>
-        </PaginationItem>
-        <PaginationItem>
-          <PaginationLink href="#">3</PaginationLink>
-        </PaginationItem>
-        <PaginationItem>
-          <PaginationEllipsis />
-        </PaginationItem>
-        <PaginationItem>
-          <PaginationNext href="#" />
+          <PaginationNext
+            href="#"
+            className={
+              currentPage === totalPages
+                ? "pointer-events-none opacity-50"
+                : undefined
+            }
+            onClick={() => onPageChange(currentPage + 1)}
+          />
         </PaginationItem>
       </PaginationContent>
     </Pagination>

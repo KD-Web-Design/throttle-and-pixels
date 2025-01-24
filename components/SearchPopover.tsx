@@ -17,13 +17,22 @@ import {
 
 export default function SearchPopover() {
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("");
   const router = useRouter();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    const queryParams = new URLSearchParams();
+
     if (searchQuery.trim()) {
-      router.push(`/searchResults?q=${encodeURIComponent(searchQuery)}`);
+      queryParams.set("q", searchQuery);
     }
+
+    if (selectedCategory && selectedCategory !== "everywhere") {
+      queryParams.set("category", selectedCategory);
+    }
+
+    router.push(`/searchResults?${queryParams.toString()}`);
   };
   return (
     <Popover>
@@ -41,12 +50,16 @@ export default function SearchPopover() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
-            <Select>
+            <Select
+              value={selectedCategory}
+              onValueChange={setSelectedCategory}
+            >
               <SelectTrigger>
-                <SelectValue placeholder="Everywhere" />
+                <SelectValue placeholder="Pick a category" />
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
+                  <SelectItem value="everywhere">Everywhere</SelectItem>
                   <SelectItem value="games">Games</SelectItem>
                   <SelectItem value="guides">Guides</SelectItem>
                   <SelectItem value="hardware">Hardware</SelectItem>
