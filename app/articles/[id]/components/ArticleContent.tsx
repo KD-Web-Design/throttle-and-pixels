@@ -54,7 +54,7 @@ export default function ArticleContent({ articleId }: { articleId: string }) {
         className="w-full max-h-[500px] object-cover rounded"
       />
       <div
-        className="whitespace-pre-wrap mt-4 bg-white p-4 shadow rounded"
+        className="whitespace-pre-wrap mt-4 bg-white p-4 shadow-sm rounded"
         dangerouslySetInnerHTML={{ __html: article.description }}
       ></div>
       <Spacing />

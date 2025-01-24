@@ -11,7 +11,7 @@ import { Input } from "./ui/input";
 
 export default function Newsletter() {
   return (
-    <Card className="bg-gradient-to-r from-emerald-400 to-cyan-400">
+    <Card className="bg-linear-to-r from-emerald-400 to-cyan-400">
       <CardHeader>
         <CardTitle className="italic">Newsletter</CardTitle>
         <CardDescription>Don&apos;t miss anything</CardDescription>
