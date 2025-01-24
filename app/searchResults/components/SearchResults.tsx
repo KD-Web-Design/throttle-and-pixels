@@ -9,6 +9,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import React, { useEffect, useMemo, useState } from "react";
 import SearchResultsLoading from "../loading";
+import { PaginationDemo } from "./PaginationDemo";
 
 export default function SearchResults() {
   const [isLoading, setIsLoading] = useState(true);
@@ -44,7 +45,7 @@ export default function SearchResults() {
       {searchResults.length === 0 && !isLoading ? (
         <p>No articles found for &quot;{query}&quot;</p>
       ) : (
-        searchResults.map((article) => (
+        searchResults.slice(0, 10).map((article) => (
           <Link
             key={article.id}
             href={`/articles/${article.id}`}
@@ -84,6 +85,7 @@ export default function SearchResults() {
           </Link>
         ))
       )}
+      <PaginationDemo />
     </>
   );
 }
