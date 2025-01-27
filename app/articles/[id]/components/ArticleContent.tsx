@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { collection, onSnapshot } from "firebase/firestore";
 import { db } from "@/db/firebaseConfig";
 import { DataType } from "@/types/types";
@@ -10,10 +10,12 @@ import { HoverCardUser } from "./HoverCardUser";
 import Image from "next/image";
 import { Spacing } from "@/components/Spacing";
 import MoreArticles from "./MoreArticles";
+import ShareArticle from "./ShareArticle";
 
 export default function ArticleContent({ articleId }: { articleId: string }) {
   const [loading, setLoading] = useState(true);
   const [article, setArticle] = useState<DataType | null>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!articleId) return;
@@ -29,6 +31,20 @@ export default function ArticleContent({ articleId }: { articleId: string }) {
     return () => unsubscribe();
   }, [articleId]);
 
+  useEffect(() => {
+    const iframes = contentRef.current?.querySelectorAll("iframe");
+    if (iframes) {
+      iframes.forEach((iframe) => {
+        const wrapper = document.createElement("div");
+        wrapper.className = "responsive-iframe-wrapper";
+
+        // Ajoute l'iframe dans le wrapper
+        iframe.parentNode?.insertBefore(wrapper, iframe);
+        wrapper.appendChild(iframe);
+      });
+    }
+  }, [article]);
+
   if (loading || !article) {
     return <Loading />;
   }
@@ -40,7 +56,11 @@ export default function ArticleContent({ articleId }: { articleId: string }) {
         <HoverCardUser article={article} />
         <span className="inline-flex items-center gap-1">
           <Clock size={16} />
-          {article.createdAt?.toDate().toLocaleDateString("en-EN")}
+          {article.createdAt?.toDate().toLocaleDateString("en-US", {
+            month: "short",
+            day: "numeric",
+            year: "numeric",
+          })}
         </span>
         <Badge variant="secondary">
           {article.category.charAt(0).toUpperCase() + article.category.slice(1)}
@@ -54,10 +74,13 @@ export default function ArticleContent({ articleId }: { articleId: string }) {
         className="w-full max-h-[500px] object-cover rounded"
       />
       <div
-        className="whitespace-pre-wrap mt-4 bg-white p-4 shadow-sm rounded"
+        ref={contentRef}
+        className="article-content whitespace-pre-wrap mt-4 bg-white p-4 shadow-sm rounded"
         dangerouslySetInnerHTML={{ __html: article.description }}
       ></div>
-      <Spacing />
+      <Spacing size="sm" />
+      <ShareArticle />
+      <Spacing size="sm" />
       <MoreArticles currentArticle={article} />
     </>
   );

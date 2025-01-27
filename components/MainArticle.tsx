@@ -33,7 +33,11 @@ export default function MainArticle({ article }: MainArticleProps) {
         </span>
         <span className="inline-flex items-center gap-1">
           <Clock size={16} />
-          {article.createdAt?.toDate().toLocaleDateString("en-EN")}
+          {article.createdAt?.toDate().toLocaleDateString("en-US", {
+            month: "short",
+            day: "numeric",
+            year: "numeric",
+          })}
         </span>
       </div>
     </Link>
