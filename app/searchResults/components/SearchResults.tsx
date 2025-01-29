@@ -81,7 +81,7 @@ export default function SearchResults() {
                     src={article.image}
                     alt={article.title}
                     fill
-                    className="object-cover rounded"
+                    className="object-cover"
                   />
                 )}
               </CardHeader>

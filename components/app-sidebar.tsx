@@ -1,4 +1,10 @@
-import { Home, LayoutDashboard, Search, Settings } from "lucide-react";
+import {
+  BookOpen,
+  CircleEllipsis,
+  Home,
+  LayoutDashboard,
+  TrendingUp,
+} from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -8,6 +14,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import Link from "next/link";
 
 const items = [
   {
@@ -21,14 +28,19 @@ const items = [
     icon: LayoutDashboard,
   },
   {
-    title: "Search",
-    url: "#",
-    icon: Search,
+    title: "Trending",
+    url: "/#trending",
+    icon: TrendingUp,
   },
   {
-    title: "Settings",
-    url: "#",
-    icon: Settings,
+    title: "Guides",
+    url: "/#guides",
+    icon: BookOpen,
+  },
+  {
+    title: "Misc",
+    url: "/#misc",
+    icon: CircleEllipsis,
   },
 ];
 
@@ -42,10 +54,10 @@ export function AppSidebar() {
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
-                    <a href={item.url}>
+                    <Link href={item.url}>
                       <item.icon />
                       <span>{item.title}</span>
-                    </a>
+                    </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}

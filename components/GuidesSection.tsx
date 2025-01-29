@@ -4,6 +4,7 @@ import type { TrendingArticlesProps } from "@/types/types";
 import Link from "next/link";
 import Image from "next/image";
 import { stripHtml } from "@/lib/stripHtml";
+import { InteractiveHoverButton } from "./ui/interactive-hover-button";
 
 export default function GuidesSection({ article }: TrendingArticlesProps) {
   const guidesArticles = article.filter(
@@ -11,7 +12,7 @@ export default function GuidesSection({ article }: TrendingArticlesProps) {
   );
 
   return (
-    <section className="p-8 flex flex-col gap-4">
+    <section id="guides" className="lg:px-8 flex flex-col gap-4">
       <h1 className="text-2xl font-semibold">Guides</h1>
       <BentoGrid>
         {guidesArticles.slice(0, 4).map((article, index) => (
@@ -39,6 +40,14 @@ export default function GuidesSection({ article }: TrendingArticlesProps) {
           </Link>
         ))}
       </BentoGrid>
+      <Link
+        href="/searchResults?category=guides"
+        className="ml-auto text-primary"
+      >
+        <InteractiveHoverButton className="text-sm">
+          View more articles
+        </InteractiveHoverButton>
+      </Link>
     </section>
   );
 }

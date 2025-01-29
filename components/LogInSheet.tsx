@@ -31,6 +31,7 @@ export default function LogInSheet() {
             <GoogleIcon size={24} />
             Login with Google
           </Button>
+          <span className="text-center">or</span>
           <Button type="button" variant="outline" onClick={loginWithGithub}>
             <GithubIcon size={24} />
             Login with Github

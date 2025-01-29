@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/card";
 import { useFirebase } from "@/context/articleContext";
 import useAuth from "@/hooks/useAuth";
+import { sortArticlesByDate } from "@/lib/sortUserArticles";
 import { Mail, PencilLine, PlusCircleIcon, User } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -22,6 +23,8 @@ export default function DashboardContent() {
   const { userArticles, deleteArticle } = useFirebase();
   const [isLoading, setIsLoading] = useState(false);
   const [loadingArticleId, setLoadingArticleId] = useState<string | null>(null);
+
+  const sortedUserArticles = sortArticlesByDate(userArticles);
 
   const handleClick = () => {
     setIsLoading(true);
@@ -88,7 +91,7 @@ export default function DashboardContent() {
         </div>
         <p className="text-muted-foreground text-lg">Your posts</p>
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 pt-4">
-          {userArticles.map((item, index) => (
+          {sortedUserArticles.map((item, index) => (
             <Card
               key={index}
               className=" flex flex-col items-center justify-between overflow-hidden relative"

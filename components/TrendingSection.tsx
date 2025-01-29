@@ -7,7 +7,10 @@ import { Badge } from "./ui/badge";
 
 export default function TrendingSection({ article }: TrendingArticlesProps) {
   return (
-    <section className="w-full bg-secondary rounded p-8 flex flex-col">
+    <section
+      id="trending"
+      className="w-full bg-secondary rounded p-4 lg:p-8 flex flex-col"
+    >
       <h1 className="mb-8 text-2xl font-semibold">Now Trending</h1>
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 flex-1">
         {article.slice(0, 6).map((a) => (

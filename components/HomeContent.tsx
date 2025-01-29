@@ -10,6 +10,7 @@ import { Spacing } from "@/components/Spacing";
 import TrendingSection from "@/components/TrendingSection";
 import LoadingHome from "./LoadingHome";
 import GuidesSection from "./GuidesSection";
+import MiscSection from "./MiscSection";
 
 export default function HomeContent() {
   const [articles, setArticles] = useState<DataType[]>([]);
@@ -44,6 +45,8 @@ export default function HomeContent() {
       <TrendingSection article={articles} />
       <Spacing size="sm" />
       <GuidesSection article={articles} />
+      <Spacing size="sm" />
+      <MiscSection article={articles} />
     </main>
   );
 }
