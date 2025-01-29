@@ -38,6 +38,7 @@ export default function Navbar() {
           <PopoverTrigger>
             <Avatar className="w-8 h-8">
               <AvatarImage
+                fetchPriority="high"
                 src={user.photoURL ?? undefined}
                 alt={user.displayName ?? undefined}
               />

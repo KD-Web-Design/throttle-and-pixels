@@ -29,6 +29,7 @@ export default function MiscSection({ article }: TrendingArticlesProps) {
                   src={article.image}
                   alt={article.title}
                   fill
+                  sizes="auto"
                   className="object-cover rounded"
                 />
               )}

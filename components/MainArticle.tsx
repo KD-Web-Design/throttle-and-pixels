@@ -18,6 +18,7 @@ export default function MainArticle({ article }: MainArticleProps) {
           className="rounded-xl object-cover w-full transition-transform duration-500 hover:scale-105"
           width={800}
           height={800}
+          priority
         />
       </div>
       <Badge className="w-fit" variant="secondary">

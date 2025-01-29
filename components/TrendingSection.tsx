@@ -18,7 +18,13 @@ export default function TrendingSection({ article }: TrendingArticlesProps) {
             <Card key={a.id} className="overflow-hidden h-full flex flex-col">
               <CardContent className="px-0 flex-1">
                 <div className="relative w-full h-52">
-                  <Image src={a.image} alt={a.title} fill objectFit="cover" />
+                  <Image
+                    src={a.image}
+                    alt={a.title}
+                    fill
+                    sizes="auto"
+                    fetchPriority="auto"
+                  />
                 </div>
               </CardContent>
               <CardFooter className="flex flex-col gap-2 items-start">

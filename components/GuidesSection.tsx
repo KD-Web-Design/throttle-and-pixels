@@ -32,6 +32,7 @@ export default function GuidesSection({ article }: TrendingArticlesProps) {
                     src={article.image}
                     alt={article.title}
                     fill
+                    sizes="auto"
                     className="object-cover rounded-xl"
                   />
                 </div>
