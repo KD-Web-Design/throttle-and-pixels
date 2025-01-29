@@ -15,9 +15,12 @@ export default function GuidesSection({ article }: TrendingArticlesProps) {
       <h1 className="text-2xl font-semibold">Guides</h1>
       <BentoGrid>
         {guidesArticles.slice(0, 4).map((article, index) => (
-          <Link key={article.id} href={`/articles/${article.id}`}>
+          <Link
+            key={article.id}
+            href={`/articles/${article.id}`}
+            className={index === 0 || index === 3 ? "md:col-span-2" : ""}
+          >
             <BentoGridItem
-              className={index === 0 || index === 3 ? "md:col-span-2 " : ""}
               title={article.title}
               description={
                 <p>{stripHtml(article.description).substring(0, 350)}...</p>

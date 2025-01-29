@@ -7,20 +7,16 @@ import { Badge } from "./ui/badge";
 
 export default function TrendingSection({ article }: TrendingArticlesProps) {
   return (
-    <section className="min-h-screen w-full bg-secondary rounded p-8 flex flex-col">
+    <section className="w-full bg-secondary rounded p-8 flex flex-col">
       <h1 className="mb-8 text-2xl font-semibold">Now Trending</h1>
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 flex-1">
         {article.slice(0, 6).map((a) => (
           <Link key={a.id} href={`/articles/${a.id}`} className="group">
             <Card key={a.id} className="overflow-hidden h-full flex flex-col">
               <CardContent className="px-0 flex-1">
-                <Image
-                  src={a.image}
-                  alt={a.title}
-                  width={800}
-                  height={800}
-                  className="w-full h-full object-cover"
-                />
+                <div className="relative w-full h-52">
+                  <Image src={a.image} alt={a.title} fill objectFit="cover" />
+                </div>
               </CardContent>
               <CardFooter className="flex flex-col gap-2 items-start">
                 <Badge className="w-fit" variant="secondary">
