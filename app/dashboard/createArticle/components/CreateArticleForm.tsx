@@ -49,9 +49,20 @@ export default function CreateArticleForm() {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
-    setFile(selectedFile);
 
     if (selectedFile) {
+      if (selectedFile.size > 1 * 1024 * 1024) {
+        toast({
+          title: "Error ❌",
+          description: "The image must be smaller than 1MB.",
+          variant: "destructive",
+        });
+        setFile(undefined);
+        setImagePreview(undefined);
+        return;
+      }
+
+      setFile(selectedFile);
       const imageUrl = URL.createObjectURL(selectedFile);
       setImagePreview(imageUrl);
     }
@@ -144,6 +155,9 @@ export default function CreateArticleForm() {
             id="image"
             className="cursor-pointer"
           />
+          {errors.image && (
+            <span className="text-red-500 text-sm">{errors.image.message}</span>
+          )}
           {imagePreview && (
             <img
               className="w-full object-cover max-h-[500px] rounded-lg"

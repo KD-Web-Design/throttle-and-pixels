@@ -19,7 +19,7 @@ export type DataFormType = {
   title: string;
   description: string;
   category: string;
-  image?: string;
+  image: string;
 };
 
 export type DbContextType = {

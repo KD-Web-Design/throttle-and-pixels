@@ -7,7 +7,7 @@ import { useFirebase } from "@/context/articleContext";
 import { schemaArticle } from "@/schema/schema";
 import { DataFormType, DataType } from "@/types/types";
 import { useRouter, useParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import useAuth from "@/hooks/useAuth";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Card, CardContent } from "@/components/ui/card";
@@ -52,6 +52,7 @@ export default function UpdateArticleForm() {
       title: articleToUpdate?.title || "",
       description: articleToUpdate?.description || "",
       category: articleToUpdate?.category || "",
+      image: articleToUpdate?.image || "",
     }
   );
 
@@ -101,7 +102,20 @@ export default function UpdateArticleForm() {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
-    setFile(selectedFile);
+    if (selectedFile) {
+      if (selectedFile.size > 1 * 1024 * 1024) {
+        toast({
+          title: "Error ❌",
+          description: "The image must be smaller than 1MB.",
+          variant: "destructive",
+        });
+        setFile(undefined);
+        return;
+      }
+      setFile(selectedFile);
+      const imageUrl = URL.createObjectURL(selectedFile);
+      setCurrentImageUrl(imageUrl);
+    }
   };
 
   const onSubmit: SubmitHandler<DataFormType> = async (formData) => {
@@ -128,7 +142,7 @@ export default function UpdateArticleForm() {
       await updateArticle(updatedArticle);
 
       // Réinitialiser le formulaire après soumission
-      setFormData({ title: "", description: "", category: "" });
+      setFormData({ title: "", description: "", category: "", image: "" });
       router.push("/dashboard");
       toast({
         title: "Success ✅",
